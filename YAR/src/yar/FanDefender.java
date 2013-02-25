@@ -20,5 +20,11 @@ public class FanDefender implements IDefender {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void calculateDefenderPosition(double d1, double w1, double w2) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -8,8 +8,6 @@ package master;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import bluetooth.Transmission;
-
 import lejos.nxt.LCD;
 
 /*

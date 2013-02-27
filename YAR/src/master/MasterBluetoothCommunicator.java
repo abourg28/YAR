@@ -3,7 +3,7 @@
  */
 package master;
 
-import slave.Pos;
+import yar.Pos;
 
 /**
  * This class takes care of communicating with the other NXT brick.
@@ -18,6 +18,7 @@ public class MasterBluetoothCommunicator {
 	
 	public boolean sendUSPollRequest() {
 		// TODO
+		return false;
 	}
 	
 	public void sendOpenFanRequest() {
@@ -34,6 +35,7 @@ public class MasterBluetoothCommunicator {
 	
 	public Pos sendLaunchPositionRequest() {
 		// TODO
+		return null;
 	}
 	
 	public void sendLaunchRequest() {

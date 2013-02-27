@@ -3,7 +3,8 @@
  */
 package slave;
 
-import NXTRegulatedMotor;
+import lejos.nxt.NXTRegulatedMotor;
+
 
 /**
  * This class takes care of launching the projectile on an angle.
@@ -24,19 +25,22 @@ public class AngleLauncher implements ILauncher {
 		this.rightMotor = rightMotor;
 	}
 	
-	@Override
+	/**
+	 * Rotates the catapult to launch projectile.
+	 */
 	public void launch() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	/**
+	 * Rotates the catapult back to original position
+	 */
 	public void retract() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	/**
 	 * Update the x, y, and theta according to parameters.
 	 * @param d1
@@ -47,19 +51,16 @@ public class AngleLauncher implements ILauncher {
 		
 	}
 
-	@Override
 	public double getLaunchX() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public double getLaunchY() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public double getLaunchTheta() {
 		// TODO Auto-generated method stub
 		return 0;

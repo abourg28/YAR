@@ -1,4 +1,4 @@
-package slave;
+package yar;
 
 public class Pos {
 	public double x;

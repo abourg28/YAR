@@ -6,7 +6,7 @@ package master;
  * @author alex
  *
  */
-public abstract class Navigator implements INavigator extends Thread {
+public abstract class Navigator extends Thread implements INavigator {
 	public Navigator() {
 		// TODO Auto-generated method stub
 	}

@@ -10,37 +10,41 @@ package yar;
  * @author alex
  * 
  */
+/**
+ * @author Frank the Tank
+ *
+ */
 public class FanDefender implements IDefender {
 
+	
 	/**
-	 * This method will rotate the robot to the heading needed for this defense
-	 * strategy. This requires that the robot be in the correct position.
+	 * @see yar.IDefender#orient()
 	 */
 	public void orient() {
 		// TODO Auto-generated method stub
 
 	}
 
+	
 	/**
-	 * This method will open one side of the fan.
+	 * @see yar.IDefender#defend()
 	 */
 	public void defend() {
 		// TODO Auto-generated method stub
 
 	}
 
+	
 	/**
-	 * This method will close one side of the fan.
+	 * @see yar.IDefender#stop()
 	 */
 	public void stop() {
 		// TODO Auto-generated method stub
 
 	}
 
-	/**
-	 * This method will calculate the ideal defender position for this strategy.
-	 * The calculated position should then be requested from the navigator
-	 * before calling orient and defend.
+	/** 
+	 * @see yar.IDefender#calculateDefenderPosition(double, double, double)
 	 */
 	public void calculateDefenderPosition(double d1, double w1, double w2) {
 		// TODO Auto-generated method stub

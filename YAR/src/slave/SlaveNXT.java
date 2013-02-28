@@ -8,6 +8,8 @@ package slave;
  *
  */
 public class SlaveNXT {
+	
+	private SlaveBluetoothCommunicator comm;
 
 	/**
 	 * @param args

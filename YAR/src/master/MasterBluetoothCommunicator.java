@@ -12,33 +12,33 @@ import yar.Pos;
  */
 public class MasterBluetoothCommunicator {
 	
-	public void InitializeConnection() {
+	public static void InitializeConnection() {
 		// TODO
 	}
 	
-	public boolean sendUSPollRequest() {
+	public static boolean sendUSPollRequest() {
 		// TODO
 		return false;
 	}
 	
-	public void sendOpenFanRequest() {
+	public static void sendOpenFanRequest() {
 		// TODO
 	}
 	
-	public void sendCloseFanRequest() {
+	public static void sendCloseFanRequest() {
 		// TODO
 	}
 	
-	public void sendInstructions() {
+	public static void sendInstructions(Instructions instructions) {
 		// TODO
 	}
 	
-	public Pos sendLaunchPositionRequest() {
+	public static Pos sendLaunchPositionRequest() {
 		// TODO
 		return null;
 	}
 	
-	public void sendLaunchRequest() {
+	public static void sendLaunchRequest() {
 		// TODO
 	}
 

@@ -23,6 +23,7 @@ public class IntersectionDetector extends Thread {
 		// TODO
 		// Need to update Odometer
 		// Need to US Poll to see if there is an obstacle ahead.
+		MasterBluetoothCommunicator.sendUSPollRequest();
 	}
 
 }

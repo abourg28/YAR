@@ -8,11 +8,14 @@ package master;
  * 
  */
 public class LineFollowingNavigator extends Navigator {
+	
+	private IntersectionDetector detector;
 
-	public LineFollowingNavigator() {
+	public LineFollowingNavigator(Odometer odo) {
 		// TODO
 
 		// Need to create an Intersection Detector with appropriate LightSensor
+		super(odo);
 	}
 
 	/**

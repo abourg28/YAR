@@ -7,7 +7,10 @@ package master;
  *
  */
 public abstract class Navigator extends Thread implements INavigator {
-	public Navigator() {
+	
+	protected Odometer odo;
+	
+	public Navigator(Odometer odo) {
 		// TODO Auto-generated method stub
 	}
 

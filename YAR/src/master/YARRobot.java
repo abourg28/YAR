@@ -20,4 +20,10 @@ public class YARRobot implements IRobot {
 		
 	}
 
+	@Override
+	public void getDisplacementAndHeading(double[] dDH) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

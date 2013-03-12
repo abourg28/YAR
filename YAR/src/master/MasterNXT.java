@@ -26,8 +26,8 @@ public class MasterNXT {
 		// TODO Auto-generated method stub
 		instructions = new Instructions();
 		robot = new YARRobot();
-		odo = new Odometer();
-		nav = new BlockNavigator(odo);
+		odo = new Odometer(robot, true);
+		nav = odo.getNavigator();
 
 		// clear the display
 		LCD.clear();

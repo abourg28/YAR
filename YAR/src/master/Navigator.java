@@ -10,7 +10,7 @@ public abstract class Navigator extends Thread implements INavigator {
 	
 	protected Odometer odo;
 	
-	public Navigator(Odometer odo) {
+	protected Navigator(Odometer odo) {
 		// TODO Auto-generated method stub
 	}
 

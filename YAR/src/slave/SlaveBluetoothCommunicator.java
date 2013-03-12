@@ -26,7 +26,8 @@ public class SlaveBluetoothCommunicator {
 
 	private BTConnection conn;
 
-	public SlaveBluetoothCommunicator(USPoller poller, ILauncher launcher, IDefender defender) {
+	public SlaveBluetoothCommunicator(USPoller poller, ILauncher launcher,
+			IDefender defender) {
 		this.poller = poller;
 		this.launcher = launcher;
 		this.defender = defender;

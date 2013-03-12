@@ -7,6 +7,7 @@ import common.IDefender;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
+import master.USLocalizer.LocalizationType;
 
 /**
  * @author alex
@@ -19,6 +20,7 @@ public class MasterNXT {
 	private static Odometer odo;
 	private static INavigator nav;
 	private static IDefender defender;
+	private static USLocalizer localizer;
 
 	/**
 	 * @param args
@@ -29,6 +31,7 @@ public class MasterNXT {
 		robot = new YARRobot();
 		odo = new Odometer(robot, true);
 		nav = odo.getNavigator();
+		localizer = new USLocalizer(odo, LocalizationType.FALLING_EDGE);
 
 		// clear the display
 		LCD.clear();

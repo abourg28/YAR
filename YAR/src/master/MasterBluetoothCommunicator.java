@@ -30,9 +30,16 @@ public class MasterBluetoothCommunicator {
 		conn = Bluetooth.connect(slave);
 	}
 
-	public static boolean sendUSPollRequest() {
+	/**
+	 * Polls the ultrasonic sensor of the slave brick.
+	 * 
+	 * @return the distance to the obstacle in from of the ultrasonic sensor
+	 */
+	public static int sendUSPollRequest() {
 		// TODO
-		return false;
+		// Send Protocol.US_POLL_REQUEST to slave
+		// Read distance
+		return 255;
 	}
 
 	public static void sendOpenFanRequest() {

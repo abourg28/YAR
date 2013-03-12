@@ -1,7 +1,7 @@
 /**
  * 
  */
-package yar;
+package common;
 
 /**
  * @author alex

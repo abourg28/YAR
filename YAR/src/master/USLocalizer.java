@@ -1,7 +1,7 @@
 /**
  * 
  */
-package slave;
+package master;
 
 /**
  * One of the first stages of the robot. This is the initial localization to

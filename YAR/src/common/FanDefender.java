@@ -1,7 +1,7 @@
 /**
  * 
  */
-package yar;
+package common;
 
 /**
  * This class will orient and defend the goal using a fan. This class only opens
@@ -18,7 +18,7 @@ public class FanDefender implements IDefender {
 
 	
 	/**
-	 * @see yar.IDefender#orient()
+	 * @see common.IDefender#orient()
 	 */
 	public void orient() {
 		// TODO Auto-generated method stub
@@ -27,7 +27,7 @@ public class FanDefender implements IDefender {
 
 	
 	/**
-	 * @see yar.IDefender#defend()
+	 * @see common.IDefender#defend()
 	 */
 	public void defend() {
 		// TODO Auto-generated method stub
@@ -36,7 +36,7 @@ public class FanDefender implements IDefender {
 
 	
 	/**
-	 * @see yar.IDefender#stop()
+	 * @see common.IDefender#stop()
 	 */
 	public void stop() {
 		// TODO Auto-generated method stub
@@ -44,7 +44,7 @@ public class FanDefender implements IDefender {
 	}
 
 	/** 
-	 * @see yar.IDefender#calculateDefenderPosition(double, double, double)
+	 * @see common.IDefender#calculateDefenderPosition(double, double, double)
 	 */
 	public void calculateDefenderPosition(double d1, double w1, double w2) {
 		// TODO Auto-generated method stub

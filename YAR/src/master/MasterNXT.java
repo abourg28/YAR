@@ -3,9 +3,10 @@
  */
 package master;
 
+import common.IDefender;
+
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
-import yar.IDefender;
 
 /**
  * @author alex

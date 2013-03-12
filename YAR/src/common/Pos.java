@@ -1,4 +1,4 @@
-package yar;
+package common;
 
 public class Pos {
 	public double x;

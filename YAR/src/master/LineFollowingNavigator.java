@@ -9,7 +9,7 @@ package master;
  */
 public class LineFollowingNavigator extends Navigator {
 	
-	private IntersectionDetector detector;
+	private LineDetector detector;
 
 	public LineFollowingNavigator(Odometer odo) {
 		// TODO

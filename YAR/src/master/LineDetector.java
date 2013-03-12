@@ -10,16 +10,16 @@ import lejos.nxt.LightSensor;
  * @author alex
  * 
  */
-public class IntersectionDetector extends Thread {
+public class LineDetector extends Thread {
 	
-	public IntersectionDetector (LightSensor ls) {
+	public LineDetector (LightSensor ls) {
 		// TODO
 	}
 	
 	/**
 	 * This is called whenever an intersection has been detected.
 	 */
-	private void IntersectionDetected () {
+	private void lineDetected () {
 		// TODO
 		// Need to update Odometer
 		// Need to US Poll to see if there is an obstacle ahead.

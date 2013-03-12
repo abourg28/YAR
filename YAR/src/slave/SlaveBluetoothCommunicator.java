@@ -26,10 +26,17 @@ public class SlaveBluetoothCommunicator {
 
 	private BTConnection conn;
 
-	public SlaveBluetoothCommunicator() {
-		// TODO Intiialize global variables
+	public SlaveBluetoothCommunicator(USPoller poller, ILauncher launcher, IDefender defender) {
+		this.poller = poller;
+		this.launcher = launcher;
+		this.defender = defender;
+		this.conn = null;
 	}
 
+	/**
+	 * This method will wait for connection with the master brick and will
+	 * handle incoming requests in a continuous loop.
+	 */
 	public void handleRequests() {
 		// TODO
 		Bluetooth.setFriendlyName(Protocol.SLAVE_NAME);
@@ -51,9 +58,6 @@ public class SlaveBluetoothCommunicator {
 				case Protocol.LAUNCH_REQUEST:
 					handleLaunchRequest();
 					break;
-				case Protocol.LOCALIZATION_REQUEST:
-					handleLocalizationRequest();
-					break;
 				case Protocol.OPEN_FAN_REQUEST:
 					handleOpenFanRequest();
 					break;
@@ -63,6 +67,9 @@ public class SlaveBluetoothCommunicator {
 				case Protocol.US_POLL_REQUEST:
 					handleUsPollRequest();
 					break;
+				case Protocol.US_DETECT_EDGE_REQUEST:
+					handleUsDetectEdgeRequest();
+					break;
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -71,48 +78,42 @@ public class SlaveBluetoothCommunicator {
 		}
 	}
 
+	private void handleUsDetectEdgeRequest() {
+		// TODO
+		// Read in the isFalling boolean
+		// Read in the range integer
+		// Wait until the appropriate edge is detected
+		// Send Protocol.STOP_REQUEST to Master
+	}
+
 	private void handleUsPollRequest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void handleUpdateInstructionsRequest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void handleOpenFanRequest() {
 		// TODO Auto-generated method stub
-		
-	}
 
-	private void handleLocalizationRequest() {
-		// TODO Auto-generated method stub
-		DataInputStream input = conn.openDataInputStream();
-		DataOutputStream output = conn.openDataOutputStream();
-		
-		// Start localization routine
-		// Send Protocol.ROTATE_REQUEST to Master
-		// Send rotation speed to Master
-		// ...		
-		// Send Protocol.STOP_REQUEST to Master
-		// Send updated position
-		
 	}
 
 	private void handleLaunchRequest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void handleLaunchPositionRequest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void handleCloseFanRequest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

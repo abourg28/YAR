@@ -42,7 +42,7 @@ public class USLocalizer {
 
 	public USLocalizer(Odometer odo, LocalizationType locType) {
 		this.odo = odo;
-		this.robot = odo.getTwoWheeledRobot();
+		this.robot = odo.getRobot();
 		this.locType = locType;
 		this.nav = odo.getNavigator();
 	}

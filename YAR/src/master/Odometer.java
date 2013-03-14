@@ -21,7 +21,7 @@ public class Odometer implements TimerListener {
 	public Odometer(IRobot robot, int period, boolean start) {
 		// initialise variables
 		this.robot = robot;
-		this.nav = BlockNavigator.getInstance(this);
+		this.nav = BlockNavigator.getInstance(robot, this);
 		odometerTimer = new Timer(period, this);
 		x = 0.0;
 		y = 0.0;
@@ -86,7 +86,7 @@ public class Odometer implements TimerListener {
 		return y;
 	}
 	
-	public IRobot getTwoWheeledRobot() {
+	public IRobot getRobot() {
 		return robot;
 	}
 	

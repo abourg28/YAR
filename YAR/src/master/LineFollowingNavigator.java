@@ -11,11 +11,11 @@ public class LineFollowingNavigator extends Navigator {
 	
 	private LineDetector detector;
 
-	public LineFollowingNavigator(Odometer odo) {
+	public LineFollowingNavigator(IRobot robot, Odometer odo) {
 		// TODO
 
 		// Need to create an Intersection Detector with appropriate LightSensor
-		super(odo);
+		super(robot, odo);
 	}
 
 	/**

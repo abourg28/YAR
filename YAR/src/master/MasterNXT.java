@@ -31,7 +31,7 @@ public class MasterNXT {
 		robot = new YARRobot();
 		odo = new Odometer(robot, true);
 		nav = odo.getNavigator();
-		localizer = new USLocalizer(odo, LocalizationType.FALLING_EDGE);
+		localizer = new USLocalizer(odo, LocalizationType.RISING_EDGE);
 
 		// clear the display
 		LCD.clear();

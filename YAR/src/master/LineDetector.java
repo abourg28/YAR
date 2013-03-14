@@ -1,6 +1,9 @@
 package master;
 
+import java.io.IOException;
+
 import lejos.nxt.LightSensor;
+import lejos.nxt.Sound;
 
 /**
  * This class will detect when a black line intersection is crossed. At each
@@ -23,7 +26,13 @@ public class LineDetector extends Thread {
 		// TODO
 		// Need to update Odometer
 		// Need to US Poll to see if there is an obstacle ahead.
-		MasterBluetoothCommunicator.sendUSPollRequest();
+		try {
+			MasterBluetoothCommunicator.sendUSPollRequest();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Sound.buzz();
+			e.printStackTrace();
+		}
 	}
 
 }

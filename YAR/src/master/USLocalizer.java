@@ -3,6 +3,8 @@
  */
 package master;
 
+import java.io.IOException;
+
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
@@ -166,10 +168,16 @@ public class USLocalizer {
 	}
 
 	private int getFilteredData() {
-		int distance;
+		int distance = 255;
 
 		// do a ping
-		distance = MasterBluetoothCommunicator.sendUSPollRequest();
+		try {
+			distance = MasterBluetoothCommunicator.sendUSPollRequest();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			Sound.buzz();
+			e1.printStackTrace();
+		}
 
 		// wait for the ping to complete
 		try {

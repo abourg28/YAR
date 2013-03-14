@@ -6,6 +6,7 @@ package slave;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
@@ -25,6 +26,8 @@ public class SlaveBluetoothCommunicator {
 	private IDefender defender;
 
 	private BTConnection conn;
+	private PrintStream out;
+	private DataInputStream in;
 
 	public SlaveBluetoothCommunicator(USPoller poller, ILauncher launcher,
 			IDefender defender) {
@@ -43,6 +46,8 @@ public class SlaveBluetoothCommunicator {
 		Bluetooth.setFriendlyName(Protocol.SLAVE_NAME);
 		// Connect with master
 		conn = Bluetooth.waitForConnection();
+		out = new PrintStream(conn.openDataOutputStream());
+		in = conn.openDataInputStream();
 
 		// Handle requests
 		while (true) {
@@ -88,8 +93,10 @@ public class SlaveBluetoothCommunicator {
 	}
 
 	private void handleUsPollRequest() {
-		// TODO Auto-generated method stub
-
+		// Poll US sensor
+		int distance = poller.poll();
+		// Send distance to Master
+		out.println(distance);
 	}
 
 	private void handleUpdateInstructionsRequest() {

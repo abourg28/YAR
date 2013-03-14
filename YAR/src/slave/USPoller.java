@@ -1,5 +1,7 @@
 package slave;
 
+import lejos.nxt.UltrasonicSensor;
+
 /**
  * This object is used to determine whether there is an obstacle in front of the
  * robot while it is navigating.
@@ -8,6 +10,12 @@ package slave;
  * 
  */
 public class USPoller {
+	
+	private UltrasonicSensor us;
+	
+	public USPoller (UltrasonicSensor us) {
+		this.us = us;
+	}
 
 	/**
 	 * Polls the ultrasonic sensor to find the distance of the object in front
@@ -16,8 +24,8 @@ public class USPoller {
 	 * @return the distance to the object
 	 */
 	public int poll() {
-		// TODO
-		return 255;
+		// TODO might want to do some preliminary filtering here
+		return us.getDistance();
 	}
 	
 	/**

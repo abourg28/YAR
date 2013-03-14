@@ -3,6 +3,8 @@
  */
 package slave;
 
+import common.Instructions;
+
 import lejos.nxt.NXTRegulatedMotor;
 
 
@@ -18,11 +20,13 @@ public class AngleLauncher implements ILauncher {
 	private double theta;
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
+	private Instructions inst;
 	
 	public AngleLauncher (NXTRegulatedMotor leftMotor,
 						   NXTRegulatedMotor rightMotor) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
+		this.inst = new Instructions();
 	}
 	
 	/**
@@ -43,10 +47,8 @@ public class AngleLauncher implements ILauncher {
 
 	/**
 	 * Update the x, y, and theta according to parameters.
-	 * @param d1
-	 * @param w1
 	 */
-	public void calculateLaunchPosition(double d1, double w1) {
+	public void calculateLaunchPosition() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -64,6 +66,10 @@ public class AngleLauncher implements ILauncher {
 	public double getLaunchTheta() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void updateInstructions(Instructions inst) {
+		this.inst = inst;		
 	}
 
 }

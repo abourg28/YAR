@@ -4,6 +4,8 @@
 package master;
 
 import common.IDefender;
+import common.Instructions;
+import common.ParseInstructions;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;

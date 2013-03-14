@@ -1,7 +1,7 @@
 /**
  * 
  */
-package master;
+package common;
 
 /**
  * Skeleton class to hold datatypes needed for final project

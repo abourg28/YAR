@@ -11,6 +11,9 @@ import java.io.PrintStream;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import common.IDefender;
+import common.Instructions;
+import common.ParseInstructions;
+import common.Pos;
 import common.Protocol;
 
 /**
@@ -85,7 +88,7 @@ public class SlaveBluetoothCommunicator {
 	}
 
 	private void handleUsDetectEdgeRequest() {
-		// TODO
+		// TODO Unused
 		// Read in the isFalling boolean
 		// Read in the range integer
 		// Wait until the appropriate edge is detected
@@ -97,11 +100,12 @@ public class SlaveBluetoothCommunicator {
 		int distance = poller.poll();
 		// Send distance to Master
 		out.println(distance);
+		out.flush();
 	}
 
 	private void handleUpdateInstructionsRequest() {
-		// TODO Auto-generated method stub
-
+		Instructions inst = ParseInstructions.parse(in);
+		// TODO update instructions
 	}
 
 	private void handleOpenFanRequest() {
@@ -110,13 +114,16 @@ public class SlaveBluetoothCommunicator {
 	}
 
 	private void handleLaunchRequest() {
-		// TODO Auto-generated method stub
-
+		this.launcher.launch();
+		this.launcher.retract();
 	}
 
 	private void handleLaunchPositionRequest() {
-		// TODO Auto-generated method stub
-
+		this.launcher.calculateLaunchPosition();
+		out.println(this.launcher.getLaunchX());
+		out.println(this.launcher.getLaunchY());
+		out.println(this.launcher.getLaunchTheta());
+		out.flush();
 	}
 
 	private void handleCloseFanRequest() {

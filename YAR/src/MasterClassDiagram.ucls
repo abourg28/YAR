@@ -10,7 +10,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <class id="2" language="java" name="master.Instructions" project="YAR" file="/YAR/src/master/Instructions.java" 
+  <class id="2" language="java" name="common.Instructions" project="YAR" file="/YAR/src/common/Instructions.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="800" y="580"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
@@ -46,8 +46,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <class id="6" language="java" name="master.ParseInstructions" project="YAR" 
-    file="/YAR/src/master/ParseInstructions.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="6" language="java" name="common.ParseInstructions" project="YAR" 
+    file="/YAR/src/common/ParseInstructions.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="541" y="914"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

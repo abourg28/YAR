@@ -3,6 +3,8 @@
  */
 package slave;
 
+import common.Instructions;
+
 /**
  * @author alex
  *
@@ -10,9 +12,10 @@ package slave;
 public interface ILauncher {	
 	public void launch();
 	public void retract();
-	public void calculateLaunchPosition(double d1, double w1);
+	public void calculateLaunchPosition();
 	public double getLaunchX();
 	public double getLaunchY();
 	public double getLaunchTheta();
+	public void updateInstructions(Instructions inst);
 
 }

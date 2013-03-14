@@ -12,6 +12,7 @@ import javax.bluetooth.RemoteDevice;
 
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import common.Instructions;
 import common.Pos;
 import common.Protocol;
 
@@ -48,6 +49,7 @@ public class MasterBluetoothCommunicator {
 	public static int sendUSPollRequest() throws IOException {
 		// Send Protocol.US_POLL_REQUEST to slave
 		out.println(Protocol.US_POLL_REQUEST);
+		out.flush();
 		// Read distance
 		int distance = Integer.parseInt(in.readLine());
 		return distance;
@@ -62,16 +64,25 @@ public class MasterBluetoothCommunicator {
 	}
 
 	public static void sendInstructions(Instructions instructions) {
-		// TODO
+		out.println(Protocol.UPDATE_INSTRUCTIONS_REQUEST);
+		out.println(instructions);
+		out.flush();
 	}
 
-	public static Pos sendLaunchPositionRequest() {
-		// TODO
-		return null;
+	public static Pos sendLaunchPositionRequest() throws NumberFormatException, IOException {
+		out.println(Protocol.LAUNCH_POSITION_REQUEST);
+		out.flush();
+		Pos p = new Pos();
+		p.x = Double.parseDouble(in.readLine());
+		p.y = Double.parseDouble(in.readLine());
+		p.theta = Double.parseDouble(in.readLine());
+		
+		return p;
 	}
 
 	public static void sendLaunchRequest() {
-		// TODO
+		out.println(Protocol.LAUNCH_REQUEST);
+		out.flush();
 	}
 
 	/**
@@ -86,7 +97,7 @@ public class MasterBluetoothCommunicator {
 	 *            if false this will return once an object is inside the range
 	 */
 	public static void sendUSDetectEdgeRequest(int range, boolean isFalling) {
-		// TODO
+		// TODO Unused
 		// Send Protocol.US_DETECT_EDGE_REQUEST to slave
 		// Send isFalling to slave
 		// Send range to slave

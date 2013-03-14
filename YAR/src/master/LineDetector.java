@@ -24,7 +24,9 @@ public class LineDetector extends Thread {
 	 */
 	private void lineDetected () {
 		// TODO
-		// Need to update Odometer
+		// Need to update Odometer's position
+		// Need to update Odometer's heading
+		
 		// Need to US Poll to see if there is an obstacle ahead.
 		try {
 			MasterBluetoothCommunicator.sendUSPollRequest();

@@ -19,9 +19,9 @@ import master.USLocalizer.LocalizationType;
  */
 public class MasterNXT {
 	
-	private static SensorPort usPort = SensorPort.S1;
+	private static SensorPort usPort = SensorPort.S4;
 	private static SensorPort leftLsPort = SensorPort.S2;
-	private static SensorPort rightLsPort = SensorPort.S3;
+	private static SensorPort rightLsPort = SensorPort.S1;
 
 	private static IRobot robot;
 	private static Instructions instructions;
@@ -49,13 +49,14 @@ public class MasterNXT {
 		LCD.drawString("Press any button ", 0, 0);
 		LCD.drawString("    to start     ", 0, 1);
 
-		Button.waitForPress();
+		Button.waitForAnyPress();
 
 		// Receive instructions from server
-		ParseInstructions.parse(null); // Replace null with the data input
+		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input
 										// stream
 		// Send instructions to slave brick
-		MasterBluetoothCommunicator.sendInstructions(instructions);
+		// TODO uncomment MasterBluetoothCommunicator.InitializeConnection()
+		// TODO uncomment MasterBluetoothCommunicator.sendInstructions(instructions);
 
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();

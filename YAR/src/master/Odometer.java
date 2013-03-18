@@ -96,10 +96,16 @@ public class Odometer implements TimerListener {
 	}
 
 	// mutators
+	public void setX(double x) {
+		setPosition(new double[]{x,0,0}, new boolean[]{true,false,false});
+	}
+	
+	public void setY(double y) {
+		setPosition(new double[]{0,y,0}, new boolean[]{false,true,false});
+	}
+	
 	public void setTheta(double theta) {
-		synchronized (lock) {
-			this.theta = theta;
-		}
+		setPosition(new double[]{0,0,theta}, new boolean[]{false,false,true});
 	}
 
 	public void setPosition(double[] pos, boolean[] update) {

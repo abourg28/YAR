@@ -1,4 +1,6 @@
 package master;
+
+import lejos.nxt.NXTRegulatedMotor;
 /**
  * 
  */
@@ -18,5 +20,9 @@ public interface IRobot {
 	public void setRotationSpeed(double speed);
 	public void setSpeeds(double forwardSpeed, double rotationSpeed);
 	public void getDisplacementAndHeading(double[] dDH);
+	public double getDisplacement();
+	public double getHeading();
+	public NXTRegulatedMotor getLeftMotor();
+	public NXTRegulatedMotor getRightMotor();
 
 }

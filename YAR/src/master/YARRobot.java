@@ -9,8 +9,8 @@ import lejos.nxt.NXTRegulatedMotor;
  */
 public class YARRobot implements IRobot {
 	
-	private static NXTRegulatedMotor leftMotor = Motor.A;
-	private static NXTRegulatedMotor rightMotor = Motor.B;
+	private NXTRegulatedMotor leftMotor = Motor.A;
+	private NXTRegulatedMotor rightMotor = Motor.B;
 	private double forwardSpeed, rotationSpeed;
 	
 	public YARRobot () {
@@ -67,9 +67,34 @@ public class YARRobot implements IRobot {
 	}
 
 	@Override
-	public void getDisplacementAndHeading(double[] dDH) {
-		// TODO Auto-generated method stub
+	public void getDisplacementAndHeading(double [] data) {
+		int leftTacho, rightTacho;
+		leftTacho = leftMotor.getTachoCount();
+		rightTacho = rightMotor.getTachoCount();
 		
+		data[0] = (leftTacho * LEFT_WHEEL_RADIUS + rightTacho * RIGHT_WHEEL_RADIUS) *	Math.PI / 360.0;
+		data[1] = (leftTacho * LEFT_WHEEL_RADIUS - rightTacho * RIGHT_WHEEL_RADIUS) / WHEEL_WIDTH;
+	}
+	
+	public double getDisplacement() {
+		return (leftMotor.getTachoCount() * LEFT_WHEEL_RADIUS +
+				rightMotor.getTachoCount() * RIGHT_WHEEL_RADIUS) *
+				Math.PI / 360.0;
+	}
+	
+	public double getHeading() {
+		return (leftMotor.getTachoCount() * LEFT_WHEEL_RADIUS -
+				rightMotor.getTachoCount() * RIGHT_WHEEL_RADIUS) / WHEEL_WIDTH;
+	}
+
+	@Override
+	public NXTRegulatedMotor getLeftMotor() {
+		return leftMotor;
+	}
+
+	@Override
+	public NXTRegulatedMotor getRightMotor() {
+		return rightMotor;
 	}
 
 }

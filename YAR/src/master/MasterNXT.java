@@ -20,8 +20,8 @@ import master.USLocalizer.LocalizationType;
 public class MasterNXT {
 	
 	private static SensorPort usPort = SensorPort.S4;
-	private static SensorPort leftLsPort = SensorPort.S2;
-	private static SensorPort rightLsPort = SensorPort.S1;
+	private static SensorPort leftLsPort = SensorPort.S1;
+	private static SensorPort rightLsPort = SensorPort.S2;
 
 	private static IRobot robot;
 	private static Instructions instructions;

@@ -105,5 +105,10 @@ public class BlockNavigator extends Navigator {
 		// TODO
 		return null;
 	}
+	
+	@Override
+	public void turnTo(double angle) {
+		super.turnTo(angle);
+	}
 
 }

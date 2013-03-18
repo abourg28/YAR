@@ -64,18 +64,16 @@ public class USLocalizer {
 		if (locType == LocalizationType.FALLING_EDGE) {
 			correctDistance = getFilteredData();
 
-			int firstWall = 1; // 1 corresponds to seeing a wall and 0
-								// corresponds to no wall
+			// 1 corresponds to seeing a wall and 0 corresponds to no wall
+			int firstWall = 1;
 
 			robot.getLeftMotor().setSpeed(ROTATION_SPEED);// starts rotating
 			robot.getRightMotor().setSpeed(-ROTATION_SPEED);
 			robot.getLeftMotor().forward();
 			robot.getRightMotor().backward();
 			while (firstWall == 1) {
-
-				if (correctDistance - distanceWant > 2) // falls out of noise
-														// margin sees no wall
-				{
+				if (correctDistance - distanceWant > 2) {
+					// falls out of noise margin no wall
 					firstWall = firstWall - 1; // exit
 				}
 				correctDistance = getFilteredData();// re-update the distance
@@ -93,7 +91,6 @@ public class USLocalizer {
 			try {// rest for 300 ms
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
-				Sound.buzz();
 			}
 			angleA = odo.getTheta();
 			robot.getRightMotor().forward();
@@ -114,10 +111,10 @@ public class USLocalizer {
 
 			robot.getLeftMotor().setSpeed(0);
 			robot.getRightMotor().setSpeed(0);
-			try {// rest for 300 ms
+			try {
+				// rest for 300 ms
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
-				Sound.buzz();
 			}
 			// angleA is clockwise from angleB, so assume the average of the
 			// angles to the right of angleB is 45 degrees past 'north'
@@ -162,9 +159,8 @@ public class USLocalizer {
 			robot.getRightMotor().backward();
 			while (firstWall == 0) {
 				correctDistance = getFilteredData(); // re-update the distance
-				if (correctDistance - distanceWant < -2) // falls out of noise
-															// margin sees wall
-				{
+				if (correctDistance - distanceWant < -2) {
+					// falls out of noise margin sees wall
 					firstWall = firstWall - 1; // exit
 				}
 			}
@@ -210,16 +206,17 @@ public class USLocalizer {
 				odo.setX(0);
 				odo.setY(0);
 				odo.setTheta(90);
+
 			}
+
 		}
 	}
 
 	private int getFilteredData() {
 		boolean filter = true;
 		filterControl = 0;
-
+		
 		while (filter) {
-
 			// do a ping
 			us.ping();
 			// wait for the ping to complete
@@ -227,22 +224,16 @@ public class USLocalizer {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 			}
-
 			distance = us.getDistance();
-
 			if (distance == 255 && (filterControl < FILTER_OUT)) {
 				filterControl++;
-			}
-
-			else {
+			} else {
 				filter = false;
 			}
-
 		}
 
 		return distance;
 	}
-	
 
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);

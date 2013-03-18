@@ -20,17 +20,15 @@ public class SlaveNXT {
 
 	private static NXTRegulatedMotor rightMotor = Motor.A;
 	private static NXTRegulatedMotor leftMotor = Motor.B;
-	private static SensorPort usPort = SensorPort.S1;
 	private static SlaveBluetoothCommunicator comm;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		USPoller poller = new USPoller(new UltrasonicSensor(usPort));
 		ILauncher launcher = new AngleLauncher(leftMotor, rightMotor);
 		IDefender defender = new FanDefender();
-		comm = new SlaveBluetoothCommunicator(poller, launcher, defender);
+		comm = new SlaveBluetoothCommunicator(launcher, defender);
 		comm.handleRequests();
 	}
 

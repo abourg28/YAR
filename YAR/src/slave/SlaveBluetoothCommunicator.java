@@ -24,7 +24,6 @@ import common.Protocol;
  */
 public class SlaveBluetoothCommunicator {
 
-	private USPoller poller;
 	private ILauncher launcher;
 	private IDefender defender;
 
@@ -32,9 +31,8 @@ public class SlaveBluetoothCommunicator {
 	private PrintStream out;
 	private DataInputStream in;
 
-	public SlaveBluetoothCommunicator(USPoller poller, ILauncher launcher,
+	public SlaveBluetoothCommunicator(ILauncher launcher,
 			IDefender defender) {
-		this.poller = poller;
 		this.launcher = launcher;
 		this.defender = defender;
 		this.conn = null;
@@ -58,26 +56,14 @@ public class SlaveBluetoothCommunicator {
 				DataInputStream input = conn.openDataInputStream();
 				int request = input.readInt();
 				switch (request) {
-				case Protocol.CLOSE_FAN_REQUEST:
-					handleCloseFanRequest();
-					break;
 				case Protocol.LAUNCH_POSITION_REQUEST:
 					handleLaunchPositionRequest();
 					break;
 				case Protocol.LAUNCH_REQUEST:
 					handleLaunchRequest();
 					break;
-				case Protocol.OPEN_FAN_REQUEST:
-					handleOpenFanRequest();
-					break;
 				case Protocol.UPDATE_INSTRUCTIONS_REQUEST:
 					handleUpdateInstructionsRequest();
-					break;
-				case Protocol.US_POLL_REQUEST:
-					handleUsPollRequest();
-					break;
-				case Protocol.US_DETECT_EDGE_REQUEST:
-					handleUsDetectEdgeRequest();
 					break;
 				}
 			} catch (IOException e) {
@@ -87,32 +73,11 @@ public class SlaveBluetoothCommunicator {
 		}
 	}
 
-	private void handleUsDetectEdgeRequest() {
-		// TODO Unused
-		// Read in the isFalling boolean
-		// Read in the range integer
-		// Wait until the appropriate edge is detected
-		// Send Protocol.STOP_REQUEST to Master
-	}
-
-	private void handleUsPollRequest() {
-		// Poll US sensor
-		int distance = poller.poll();
-		// Send distance to Master
-		out.println(distance);
-		out.flush();
-	}
-
 	private void handleUpdateInstructionsRequest() {
 		Instructions inst = ParseInstructions.parse(in);
 		// TODO update instructions
 	}
-
-	private void handleOpenFanRequest() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	private void handleLaunchRequest() {
 		this.launcher.launch();
 		this.launcher.retract();
@@ -124,11 +89,6 @@ public class SlaveBluetoothCommunicator {
 		out.println(this.launcher.getLaunchY());
 		out.println(this.launcher.getLaunchTheta());
 		out.flush();
-	}
-
-	private void handleCloseFanRequest() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

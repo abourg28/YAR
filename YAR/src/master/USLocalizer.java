@@ -32,6 +32,7 @@ public class USLocalizer {
 
 	private Odometer odo;
 	private IRobot robot;
+	private UltrasonicSensor us;
 	private LocalizationType locType;
 	private INavigator nav;
 
@@ -40,11 +41,12 @@ public class USLocalizer {
 	/** The number of times a wall is not detected. */
 	private int notVisibleCount = 0;
 
-	public USLocalizer(Odometer odo, LocalizationType locType) {
+	public USLocalizer(Odometer odo, UltrasonicSensor us, LocalizationType locType) {
 		this.odo = odo;
 		this.robot = odo.getRobot();
 		this.locType = locType;
 		this.nav = odo.getNavigator();
+		this.us = us;
 	}
 
 	public void doLocalization() {
@@ -171,13 +173,8 @@ public class USLocalizer {
 		int distance = 255;
 
 		// do a ping
-		try {
-			distance = MasterBluetoothCommunicator.sendUSPollRequest();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			Sound.buzz();
-			e1.printStackTrace();
-		}
+		us.ping();
+		distance = us.getDistance();
 
 		// wait for the ping to complete
 		try {

@@ -28,13 +28,6 @@ public class LineDetector extends Thread {
 		// Need to update Odometer's heading
 		
 		// Need to US Poll to see if there is an obstacle ahead.
-		try {
-			MasterBluetoothCommunicator.sendUSPollRequest();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Sound.buzz();
-			e.printStackTrace();
-		}
 	}
 
 }

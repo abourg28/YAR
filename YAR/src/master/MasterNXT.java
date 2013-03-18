@@ -9,6 +9,8 @@ import common.ParseInstructions;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
+import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
 import master.USLocalizer.LocalizationType;
 
 /**
@@ -16,6 +18,10 @@ import master.USLocalizer.LocalizationType;
  * 
  */
 public class MasterNXT {
+	
+	private static SensorPort usPort = SensorPort.S1;
+	private static SensorPort leftLsPort = SensorPort.S2;
+	private static SensorPort rightLsPort = SensorPort.S3;
 
 	private static IRobot robot;
 	private static Instructions instructions;
@@ -33,7 +39,7 @@ public class MasterNXT {
 		robot = new YARRobot();
 		odo = new Odometer(robot, true);
 		nav = odo.getNavigator();
-		localizer = new USLocalizer(odo, LocalizationType.RISING_EDGE);
+		localizer = new USLocalizer(odo, new UltrasonicSensor(usPort), LocalizationType.RISING_EDGE);
 
 		// clear the display
 		LCD.clear();

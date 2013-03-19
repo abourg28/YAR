@@ -16,7 +16,7 @@ import lejos.util.Delay;
  * 
  */
 public class LineDetector extends Thread {
-	private static Odometer odometer;
+	private static Odometer odo;
 	private static double Robotwidth;
 	private static double wheelRadius;
 	LightSensor leftLS;
@@ -35,12 +35,18 @@ public class LineDetector extends Thread {
 	public LineDetector(LightSensor leftLS, LightSensor rightLS, IRobot robot,
 			Odometer odo) {
 		this.robot = robot;
-		this.odometer = odo;
+		this.odo = odo;
 		this.wheelRadius = YARRobot.LEFT_WHEEL_RADIUS;
 		this.Robotwidth = YARRobot.WHEEL_WIDTH;
 	}
 
 	public void run() {
+		
+		// TODO So here we might want to create and run 2 LineDetectorThreads
+		// Thread t = new LineDetectorThread(leftLS, odo);
+		// t.start();
+		
+		
 		while (true) { // infinite loop
 			// takes in input light value of left and right light sensor
 			// instaneously
@@ -113,17 +119,17 @@ public class LineDetector extends Thread {
 				// is corrected so set everything again to zero and change the
 				// odometer
 
-				if (odometer.getTheta() < 15 && odometer.getTheta() > 0) {
-					odometer.setTheta(0);
-				} else if (odometer.getTheta() < 105
-						&& odometer.getTheta() > 75) {
-					odometer.setTheta(90);
-				} else if (odometer.getTheta() < 195
-						&& odometer.getTheta() > 165) {
-					odometer.setTheta(180);
-				} else if (odometer.getTheta() < 285
-						&& odometer.getTheta() > 255) {
-					odometer.setTheta(270);
+				if (odo.getTheta() < 15 && odo.getTheta() > 0) {
+					odo.setTheta(0);
+				} else if (odo.getTheta() < 105
+						&& odo.getTheta() > 75) {
+					odo.setTheta(90);
+				} else if (odo.getTheta() < 195
+						&& odo.getTheta() > 165) {
+					odo.setTheta(180);
+				} else if (odo.getTheta() < 285
+						&& odo.getTheta() > 255) {
+					odo.setTheta(270);
 				}
 
 				countDifference = 0;

@@ -29,6 +29,7 @@ public class MasterNXT {
 	private static INavigator nav;
 	private static IDefender defender;
 	private static USLocalizer localizer;
+	private static USPoller poller;
 
 	/**
 	 * @param args
@@ -39,7 +40,9 @@ public class MasterNXT {
 		robot = new YARRobot();
 		odo = new Odometer(robot, true);
 		nav = odo.getNavigator();
-		localizer = new USLocalizer(odo, new UltrasonicSensor(usPort), LocalizationType.FALLING_EDGE);
+		UltrasonicSensor us = new UltrasonicSensor(usPort);
+		localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
+		poller = new USPoller(us);
 
 		// clear the display
 		LCD.clear();

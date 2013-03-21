@@ -23,26 +23,18 @@ public class MasterNXT {
 	private static SensorPort leftLsPort = SensorPort.S1;
 	private static SensorPort rightLsPort = SensorPort.S2;
 
-	private static IRobot robot;
-	private static Instructions instructions;
-	private static Odometer odo;
-	private static INavigator nav;
-	private static IDefender defender;
-	private static USLocalizer localizer;
-	private static USPoller poller;
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		instructions = new Instructions();
-		robot = new YARRobot();
+		Instructions instructions = new Instructions();
+		IRobot robot = new YARRobot();
 		UltrasonicSensor us = new UltrasonicSensor(usPort);
-		poller = new USPoller(us);
-		odo = new Odometer(robot, true, poller);
-		nav = odo.getNavigator();
-		localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
+		USPoller poller = new USPoller(us);
+		Odometer odo = new Odometer(robot, true, poller);
+		INavigator nav = odo.getNavigator();
+		USLocalizer localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
 
 		// clear the display
 		LCD.clear();

@@ -52,7 +52,7 @@ public class MasterNXT {
 		LCD.drawString("Press any button ", 0, 0);
 		LCD.drawString("    to start     ", 0, 1);
 
-		Button.waitForAnyPress();
+		Button.waitForPress();
 
 		// Receive instructions from server
 		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input

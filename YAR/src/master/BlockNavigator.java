@@ -1,11 +1,11 @@
-
 // * 
- //*/
+//*/
 package master;
 
 import common.Pos;
 import lejos.nxt.*;
 import lejos.nxt.comm.RConsole;
+
 /**
  * This is a singleton implementation of a Navigator where the robot will
  * attempt to travel as though in a grid. For example the navigator will break
@@ -17,12 +17,11 @@ import lejos.nxt.comm.RConsole;
  */
 public class BlockNavigator extends Navigator {
 
+	private final double US_RANGE = 35;
 	private LineDetector detector;
 	private static INavigator nav;
 	private static Odometer odo;
 	private IRobot robot;
-	private NXTRegulatedMotor leftMotor = Motor.A;
-	private NXTRegulatedMotor rightMotor = Motor.B;
 	private USPoller us;
 	double ROTATE_SPEED = 60;
 	double FORWARD_SPEED = 90;
@@ -30,189 +29,211 @@ public class BlockNavigator extends Navigator {
 	double xNow = odo.getX();
 	double yNow = odo.getY();
 	double xHead, yHead;
-	double closeX;			        
-	double closeY;
+	double destRow;
+	double destCol;
 
-	private BlockNavigator(IRobot robot, Odometer odo) {
+	private BlockNavigator(IRobot robot, Odometer odo, USPoller uspoller) {
 		super(robot, odo);
 		this.odo = odo;
 		this.robot = robot;
-		this.us = us;
-	
+		this.us = uspoller;
+
 		// Need to create new LineDetector
 	}
 
 	/**
 	 * Get the instance of the BlockNavigator.
 	 * 
-	 * @param robot Robot containing the corresponding motors for the wheels.
-	 * @param odo Odometer that is used to guide the navigation and that will be corrected.
+	 * @param robot
+	 *            Robot containing the corresponding motors for the wheels.
+	 * @param odo
+	 *            Odometer that is used to guide the navigation and that will be
+	 *            corrected.
 	 * @return
 	 */
-	public static INavigator getInstance(IRobot robot, Odometer odo) {
+	public static INavigator getInstance(IRobot robot, Odometer odo,
+			USPoller uspoller) {
 		if (nav == null) {
-			nav = new BlockNavigator(robot, odo);
+			nav = new BlockNavigator(robot, odo, uspoller);
 		}
 		return nav;
 	}
 
+	private double calculateDestination(double coord) {
+		double destCoord;
+		if ((coord % 30) >= 15) {
+			destCoord = coord + (30 - (coord % 30));
+		} else {
+			destCoord = coord - (coord % 30);
+		}
+
+		if (destCoord == 0) {
+			destCoord = 30;
+		} else if (destCoord == 1080) {
+			destCoord = 1080 - 30;
+		}
+		return destCoord;
+	}
+
 	@Override
 	public void travelTo(double x, double y) {
-		
+
 		this.isNavigating = true;
-		boolean atRow;
-		boolean atColumn;
-		double[] dDH;
+		int dir;
+
+		// TODO get to intersection
 		
-		//TODO get to intersection
-		
-		
-		
-		// Calculate Destination row and column
-		
-		if((x%30)>=5){ 				   
-			closeX = x + (10-(x%30));
-		}
-		else{
-			closeX = x - (x%30);
-		}
-		if((y%30)>=5){			        
-			closeY = y +(10-(y%30));
-		}
-		else{
-			closeY = y - (y%30);
-		}
-		
-		//we already there?
-		atRow = ((odo.getX() > (closeX*0.95)) && (odo.getX() < (closeX + (closeX*0.05))));
-		atColumn = ((odo.getY() > (closeY*0.95)) && (odo.getY() < (closeY + (closeY*0.05))));
-		
+
+		destRow = calculateDestination(x);
+
 		// Travel vertically loop (while not at destination row)
-		while(!atRow){
-			
-			
-			 // check if we need to go up or down
-			if(xNow < closeX){ 
-				xHead = 270;
-			}
-			else{
-				xHead = 90;
-			}
-			
-			//rotate 90 degrees until facing the right direction
-			while((headNow > (xHead+(xHead*0.05))) || (headNow < (xHead*0.95))){ 
-				turnNinety();
-				headNow = odo.getTheta();
-			}
-			
+		while (!isAt(destRow, odo.getX())) {
+
+			/*
+			 * // check if we need to go up or down if (xNow < closeX) { xHead =
+			 * 90; } else { xHead = 270; }
+			 */
+
+			// Initialize to left
+			dir = 90;
+
+			// turnTo(xHead);
+			// headNow = odo.getTheta();
+
 			// If there is an obstacle within the next tile
-			if((us.getFilteredData()) > 35){
+			if (us.isObjectInRange(US_RANGE)) {
 				// While there is an obstacle
-				while((us.getFilteredData()) > 35){
-					turnNinety();
-				}//end while there is an obstacle
-				
-			}//end if there is an obtacle
-			 
-			//move forward one tile
-			else{ 
-				this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-				leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 30.00), true);
-				rightMotor.rotate(convertDistance(robot.RIGHT_WHEEL_RADIUS, 30.00), false);
-				
+				while (us.isObjectInRange(US_RANGE)) {
+					// Turn dir
+					turnTo(odo.getTheta() + dir);
+					if (us.isObjectInRange(US_RANGE)) {
+						dir = -dir;
+						turnTo(odo.getTheta() + dir);
+					} else {
+						// Advance one tile
+						advanceATile();
+						turnTo(odo.getTheta() - dir);
+					}
+				}// end while there is an obstacle
+				advanceATile();
+				this.travelTo(x, y);
+				return;
+			} else {
+				// move forward one tile
+				advanceATile();
 			}
-			
-			//are we at the row?
-			atRow = ((odo.getX() > (closeX*0.95)) && (odo.getX() < (closeX + (closeX*0.05))));
-		}//end Travel vertically loop
-			
-			
-			
-	
+
+			// are we at the row?
+		}// end Travel vertically loop
+
+		destCol = calculateDestination(y);
 		// Travel horizontally loop (while not at destination column)
-		while(!atColumn){
-			
+		while (!isAt(destCol, odo.getY())) {
+
+			/*
 			// check if we need to go left or right
-			if(yNow < closeY){ 
+			if (yNow < closeY) {
+				yHead = 0;
+			} else {
 				yHead = 180;
 			}
-			else{
-				yHead = 0;
-			}
-			
-			//rotate 90 degrees until facing the right direction
-			while((headNow > (yHead+(yHead*0.05))) || (headNow < (yHead*0.95))){ 
-				turnNinety();
-				headNow = odo.getTheta();
-			}//end while !facing proper direction
-			
+			*/
+
+			dir = 90;
+
+			//turnTo(yHead);
+			//headNow = odo.getTheta();
+
 			// If there is an obstacle within the next tile
-			if((us.getFilteredData()) > 35){
-							
-							// While there is an obstacle
-				while((us.getFilteredData()) > 35){
-								turnNinety();
-							}//end while obstacle
-							
-			}//end if there is an obstacle
-			
-			//move forward one tile
-			else{ 
-				this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-				leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 30.00), true);
-				rightMotor.rotate(convertDistance(robot.RIGHT_WHEEL_RADIUS, 30.00), false);
-							
+			if (us.isObjectInRange(US_RANGE)) {
+
+				// While there is an obstacle
+				while (us.isObjectInRange(US_RANGE)) {
+					// Turn dir
+					turnTo(odo.getTheta() + dir);
+					if (us.isObjectInRange(US_RANGE)) {
+						dir = -dir;
+						turnTo(odo.getTheta() + dir);
+					} else {
+						advanceATile();
+						turnTo(odo.getTheta() - dir);
+					}
+				}// end while obstacle
+				advanceATile();
+				this.travelTo(x, y);
+				return;
+			} else {
+				// move forward one tile
+				advanceATile();
 			}
-			
-			//are we at the column?
-			atColumn = ((odo.getY() > (closeY*0.95)) && (odo.getY() < (closeY + (closeY*0.05))));
-			
-		}//end Travel horizontally loop
+
+		}// end Travel horizontally loop
 		
-			
-		
+		simpleTravelTo(x, y);
+
 		this.isNavigating = false;
-	}//end travelTo
-	
+	}// end travelTo
+
+	private void advanceATile() {
+		this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
+		this.robot.getLeftMotor().rotate(
+				convertDistance(robot.LEFT_WHEEL_RADIUS, 30.00), true);
+		this.robot.getRightMotor().rotate(
+				convertDistance(robot.RIGHT_WHEEL_RADIUS, 30.00), false);
+	}
+
+	private boolean isAt(double destCoord, double coord) {
+		return ((coord > (destCoord * 0.95)) && (coord < (destCoord + (destCoord * 0.05))));
+	}
+
 	/**
 	 * This navigation method does not make use of blocks.
+	 * 
 	 * @param x
 	 * @param y
 	 */
 	public void simpleTravelTo(double x, double y) {
 		super.travelTo(x, y);
 	}
-	
+
 	/**
 	 * Calculates the position of the center of the tile encapsulating x and y.
-	 * @param x X position indicating the tile of interest.
-	 * @param y Y position indicating the tile of interest.
+	 * 
+	 * @param x
+	 *            X position indicating the tile of interest.
+	 * @param y
+	 *            Y position indicating the tile of interest.
 	 * @return The position of the center of the tile of interests.
 	 */
 	private Pos getCenterOfTile(double x, double y) {
 		// TODO
 		return null;
 	}
-	
+
 	@Override
 	public void turnTo(double angle) {
 		super.turnTo(angle);
 	}
-	//method used for moving a specific distance
+
+	// method used for moving a specific distance
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
-	//methode used for moving a specific distance
+
+	// methode used for moving a specific distance
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
-	
-	//Methode for turning 90 degrees clockwise
-	private void turnNinety(){
+
+	// Methode for turning 90 degrees counterclockwise
+	private void turnNinety() {
 		this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-		leftMotor.rotate(convertAngle(robot.LEFT_WHEEL_RADIUS, robot.WHEEL_WIDTH, 90.0), true);
-		rightMotor.rotate(-convertAngle(robot.RIGHT_WHEEL_RADIUS, robot.WHEEL_WIDTH, 90.0), false);
+		this.robot.getLeftMotor()
+				.rotate(-convertAngle(robot.LEFT_WHEEL_RADIUS,
+						robot.WHEEL_WIDTH, 90.0), true);
+		this.robot.getRightMotor()
+				.rotate(convertAngle(robot.RIGHT_WHEEL_RADIUS,
+						robot.WHEEL_WIDTH, 90.0), false);
 	}
-	
 
 }

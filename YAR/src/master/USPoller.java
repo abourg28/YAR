@@ -43,8 +43,8 @@ public class USPoller {
 		return distance;
 	}
 	
-	public boolean isObjectInRange(int range) {
-		return getFilteredData() < range;
+	public boolean isObjectInRange(double US_RANGE) {
+		return getFilteredData() < US_RANGE;
 	}
 	
 }

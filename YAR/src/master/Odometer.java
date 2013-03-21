@@ -19,10 +19,10 @@ public class Odometer implements TimerListener {
 	private double x, y, theta;
 	private double[] oldDH, dDH;
 
-	public Odometer(IRobot robot, int period, boolean start) {
+	public Odometer(IRobot robot, int period, boolean start, USPoller uspoller) {
 		// initialise variables
 		this.robot = robot;
-		this.nav = BlockNavigator.getInstance(robot, this);
+		this.nav = BlockNavigator.getInstance(robot, this, uspoller);
 		odometerTimer = new Timer(period, this);
 		x = 0.0;
 		y = 0.0;
@@ -36,16 +36,16 @@ public class Odometer implements TimerListener {
 			odometerTimer.start();
 	}
 
-	public Odometer(IRobot robot) {
-		this(robot, DEFAULT_PERIOD, false);
+	public Odometer(IRobot robot, USPoller uspoller) {
+		this(robot, DEFAULT_PERIOD, false, uspoller);
 	}
 
-	public Odometer(IRobot robot, boolean start) {
-		this(robot, DEFAULT_PERIOD, start);
+	public Odometer(IRobot robot, boolean start, USPoller uspoller) {
+		this(robot, DEFAULT_PERIOD, start, uspoller);
 	}
 
-	public Odometer(IRobot robot, int period) {
-		this(robot, period, false);
+	public Odometer(IRobot robot, int period, USPoller uspoller) {
+		this(robot, period, false, uspoller);
 	}
 
 	public void timedOut() {

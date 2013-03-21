@@ -38,11 +38,11 @@ public class MasterNXT {
 		// TODO Auto-generated method stub
 		instructions = new Instructions();
 		robot = new YARRobot();
-		odo = new Odometer(robot, true);
-		nav = odo.getNavigator();
 		UltrasonicSensor us = new UltrasonicSensor(usPort);
-		localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
 		poller = new USPoller(us);
+		odo = new Odometer(robot, true, poller);
+		nav = odo.getNavigator();
+		localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
 
 		// clear the display
 		LCD.clear();

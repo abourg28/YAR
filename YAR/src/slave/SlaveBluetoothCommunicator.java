@@ -75,7 +75,7 @@ public class SlaveBluetoothCommunicator {
 
 	private void handleUpdateInstructionsRequest() {
 		Instructions inst = ParseInstructions.parse(in);
-		// TODO update instructions
+		launcher.updateInstructions(inst);
 	}
 	
 	private void handleLaunchRequest() {

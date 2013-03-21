@@ -25,7 +25,7 @@ public class USLocalizer {
 		FALLING_EDGE, RISING_EDGE
 	};
 
-	public static int ROTATION_SPEED = 30;
+	public static int ROTATION_SPEED = 90;
 	public static int WALL_DIST = 40;
 	public static int NOISE = 1;
 	public static int TRESH_HOLD = 7;

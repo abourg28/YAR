@@ -24,19 +24,22 @@ public class BlockNavigator extends Navigator {
 	private IRobot robot;
 	private USPoller us;
 	double ROTATE_SPEED = 60;
-	double FORWARD_SPEED = 90;
-	double headNow = odo.getTheta();
-	double xNow = odo.getX();
-	double yNow = odo.getY();
-	double xHead, yHead;
-	double destRow;
-	double destCol;
+	public final double FORWARD_SPEED = 60;
+	private double headNow;
+	private double xNow;
+	private double yNow;
+	private double xHead, yHead;
+	private double destRow;
+	private double destCol;
 
 	private BlockNavigator(IRobot robot, Odometer odo, USPoller uspoller) {
 		super(robot, odo);
 		this.odo = odo;
 		this.robot = robot;
 		this.us = uspoller;
+		this.headNow = odo.getTheta();
+		this.xNow = odo.getX();
+		this.yNow = odo.getY();
 
 		// Need to create new LineDetector
 	}

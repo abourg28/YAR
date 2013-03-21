@@ -62,7 +62,7 @@ public class MasterNXT {
 		// TODO uncomment MasterBluetoothCommunicator.sendInstructions(instructions);
 
 		// Localize robot and go to the center of the corner tile
-		//localizer.doLocalization();
+		localizer.doLocalization();
 
 		if (instructions.isOffense) {
 			// On offense

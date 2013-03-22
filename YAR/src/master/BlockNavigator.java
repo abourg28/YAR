@@ -40,8 +40,7 @@ public class BlockNavigator extends Navigator {
 		this.headNow = odo.getTheta();
 		this.xNow = odo.getX();
 		this.yNow = odo.getY();
-
-		// Need to create new LineDetector
+		this.detector = new LineDetector(odo);
 	}
 
 	/**
@@ -85,42 +84,46 @@ public class BlockNavigator extends Navigator {
 		int dir;
 
 		// TODO get to intersection
-		
 
 		destRow = calculateDestination(x);
 
+		// check if we need to go up or down
+		if (xNow < destRow) {
+			xHead = 90;
+		} else {
+			xHead = 270;
+		}
+		turnTo(xHead);
+		headNow = odo.getTheta();
+		
+		int counter = 0;
+
 		// Travel vertically loop (while not at destination row)
 		while (!isAt(destRow, odo.getX())) {
-
-			/*
-			 * // check if we need to go up or down if (xNow < closeX) { xHead =
-			 * 90; } else { xHead = 270; }
-			 */
-
+			LCD.drawString("Counter " + counter, 0, 4);
+			counter++;
 			// Initialize to left
 			dir = 90;
 
-			// turnTo(xHead);
-			// headNow = odo.getTheta();
-
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-				// While there is an obstacle
-				while (us.isObjectInRange(US_RANGE)) {
-					// Turn dir
-					turnTo(odo.getTheta() + dir);
-					if (us.isObjectInRange(US_RANGE)) {
-						dir = -dir;
-						turnTo(odo.getTheta() + dir);
-					} else {
-						// Advance one tile
-						advanceATile();
-						turnTo(odo.getTheta() - dir);
-					}
-				}// end while there is an obstacle
+//				// While there is an obstacle
+//				while (us.isObjectInRange(US_RANGE)) {
+//					// Turn dir
+//					turnTo(odo.getTheta() + dir);
+//					if (us.isObjectInRange(US_RANGE)) {
+//						dir = -dir;
+//						turnTo(odo.getTheta() + dir);
+//					} else {
+//						// Advance one tile
+//						advanceATile();
+//						turnTo(odo.getTheta() - dir);
+//					}
+//				}// end while there is an obstacle
+//				advanceATile();
+//				this.travelTo(x, y);
+//				return;
 				advanceATile();
-				this.travelTo(x, y);
-				return;
 			} else {
 				// move forward one tile
 				advanceATile();
@@ -130,63 +133,57 @@ public class BlockNavigator extends Navigator {
 		}// end Travel vertically loop
 
 		destCol = calculateDestination(y);
+		// check if we need to go left or right
+		if (yNow < destCol) {
+			yHead = 0;
+		} else {
+			yHead = 180;
+		}
+		turnTo(yHead);
+		headNow = odo.getTheta();
+
 		// Travel horizontally loop (while not at destination column)
 		while (!isAt(destCol, odo.getY())) {
-
-			/*
-			// check if we need to go left or right
-			if (yNow < closeY) {
-				yHead = 0;
-			} else {
-				yHead = 180;
-			}
-			*/
-
+			// Initialize to left
 			dir = 90;
-
-			//turnTo(yHead);
-			//headNow = odo.getTheta();
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-
-				// While there is an obstacle
-				while (us.isObjectInRange(US_RANGE)) {
-					// Turn dir
-					turnTo(odo.getTheta() + dir);
-					if (us.isObjectInRange(US_RANGE)) {
-						dir = -dir;
-						turnTo(odo.getTheta() + dir);
-					} else {
-						advanceATile();
-						turnTo(odo.getTheta() - dir);
-					}
-				}// end while obstacle
-				advanceATile();
-				this.travelTo(x, y);
-				return;
+//
+//				// While there is an obstacle
+//				while (us.isObjectInRange(US_RANGE)) {
+//					// Turn dir
+//					turnTo(odo.getTheta() + dir);
+//					if (us.isObjectInRange(US_RANGE)) {
+//						dir = -dir;
+//						turnTo(odo.getTheta() + dir);
+//					} else {
+//						advanceATile();
+//						turnTo(odo.getTheta() - dir);
+//					}
+//				}// end while obstacle
+//				advanceATile();
+//				this.travelTo(x, y);
+//				return;
 			} else {
 				// move forward one tile
 				advanceATile();
 			}
 
 		}// end Travel horizontally loop
-		
+
 		simpleTravelTo(x, y);
 
 		this.isNavigating = false;
 	}// end travelTo
 
 	private void advanceATile() {
-		this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-		this.robot.getLeftMotor().rotate(
-				convertDistance(robot.LEFT_WHEEL_RADIUS, 30.00), true);
-		this.robot.getRightMotor().rotate(
-				convertDistance(robot.RIGHT_WHEEL_RADIUS, 30.00), false);
+		this.detector.advanceToIntersection();
 	}
 
 	private boolean isAt(double destCoord, double coord) {
-		return ((coord > (destCoord * 0.95)) && (coord < (destCoord + (destCoord * 0.05))));
+		int tol = 8;
+		return ((coord > (destCoord - tol)) && (coord < (destCoord + tol)));
 	}
 
 	/**

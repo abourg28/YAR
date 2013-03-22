@@ -33,6 +33,7 @@ public class MasterNXT {
 		UltrasonicSensor us = new UltrasonicSensor(usPort);
 		USPoller poller = new USPoller(us);
 		Odometer odo = new Odometer(robot, true, poller);
+		OdometryDisplay disp = new OdometryDisplay(odo);
 		INavigator nav = odo.getNavigator();
 		USLocalizer localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
 
@@ -44,7 +45,8 @@ public class MasterNXT {
 		LCD.drawString("Press any button ", 0, 0);
 		LCD.drawString("    to start     ", 0, 1);
 
-		Button.waitForPress();
+		Button.waitForAnyPress();
+		disp.start();
 
 		// Receive instructions from server
 		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input

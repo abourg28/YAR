@@ -31,7 +31,7 @@ public abstract class Navigator extends Thread implements INavigator {
 		
 		double dy = y - pos[1];
 		double dx = x - pos[0];
-		LCD.drawString("Turning !!    ", 0, 6);
+//		LCD.drawString("Turning !!    ", 0, 6);
 		
 		if (dx > 0) {
 			minAng = Math.atan(dy / dx) * (180.0 / Math.PI);
@@ -43,7 +43,7 @@ public abstract class Navigator extends Thread implements INavigator {
 		// Rotate
 		turnTo(-minAng);
 		
-		LCD.drawString("Going Forward!!", 0, 6);
+//		LCD.drawString("Going Forward!!", 0, 6);
 		this.robot.setForwardSpeed(FORWARD_SPEED);
 		
 		while (Math.abs(x - pos[0]) > CM_ERR || Math.abs(y - pos[1]) > CM_ERR) {	
@@ -61,8 +61,8 @@ public abstract class Navigator extends Thread implements INavigator {
 		
 
 		while (Math.abs(error) > DEG_ERR) {
-			LCD.drawString("Angle:" + angle + "  ", 0, 4);
-			LCD.drawString("Error:" + error + "   ", 0, 5);
+//			LCD.drawString("Angle:" + angle + "  ", 0, 4);
+//			LCD.drawString("Error:" + error + "   ", 0, 5);
 			this.odo.getPosition(pos);
 			error = minimizeAngle(angle - pos[2]);
 
@@ -82,8 +82,7 @@ public abstract class Navigator extends Thread implements INavigator {
 
 	@Override
 	public boolean isNavigating() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.isNavigating;
 	}
 	
 	private double minimizeAngle(double error) {

@@ -3,6 +3,7 @@
  */
 package master;
 
+import lejos.nxt.LCD;
 import lejos.nxt.UltrasonicSensor;
 
 /**
@@ -44,7 +45,9 @@ public class USPoller {
 	}
 	
 	public boolean isObjectInRange(double US_RANGE) {
-		return getFilteredData() < US_RANGE;
+		int dist = getFilteredData();
+		LCD.drawString("Object in " + dist, 0, 5);
+		return dist < US_RANGE;
 	}
 	
 }

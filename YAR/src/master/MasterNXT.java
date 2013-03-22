@@ -57,7 +57,7 @@ public class MasterNXT {
 
 		// Localize robot and go to the center of the corner tile
 		//localizer.doLocalization();
-		nav.travelTo(60, 60);
+		nav.travelTo(60, 0);
 
 		if (instructions.isOffense) {
 			// On offense

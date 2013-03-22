@@ -25,7 +25,7 @@ import common.Protocol;
 public class MasterBluetoothCommunicator {
 
 	private static BTConnection conn;
-	private static PrintStream out;
+	private static DataOutputStream out;
 	private static DataInputStream in;
 
 	public static void InitializeConnection() {
@@ -36,29 +36,32 @@ public class MasterBluetoothCommunicator {
 		// paired manually
 		RemoteDevice slave = Bluetooth.getKnownDevice(Protocol.SLAVE_NAME);
 		conn = Bluetooth.connect(slave);
-		out = new PrintStream(conn.openDataOutputStream());
+		out = conn.openDataOutputStream();
 		in = conn.openDataInputStream();
 	}
 
-	public static void sendInstructions(Instructions instructions) {
-		out.println(Protocol.UPDATE_INSTRUCTIONS_REQUEST);
-		out.println(instructions);
+	public static void sendInstructions(Instructions instructions)
+			throws IOException {
+		out.writeInt(Protocol.UPDATE_INSTRUCTIONS_REQUEST);
 		out.flush();
+		// out.println(instructions);
+		// out.flush();
 	}
 
-	public static Pos sendLaunchPositionRequest() throws NumberFormatException, IOException {
-		out.println(Protocol.LAUNCH_POSITION_REQUEST);
+	public static Pos sendLaunchPositionRequest() throws NumberFormatException,
+			IOException {
+		out.writeInt(Protocol.LAUNCH_POSITION_REQUEST);
 		out.flush();
 		Pos p = new Pos();
-		p.x = Double.parseDouble(in.readLine());
-		p.y = Double.parseDouble(in.readLine());
-		p.theta = Double.parseDouble(in.readLine());
-		
+		p.x = in.readDouble();
+		p.y = in.readDouble();
+		p.theta = in.readDouble();
+
 		return p;
 	}
 
-	public static void sendLaunchRequest() {
-		out.println(Protocol.LAUNCH_REQUEST);
+	public static void sendLaunchRequest() throws IOException {
+		out.writeInt(Protocol.LAUNCH_REQUEST);
 		out.flush();
 	}
 

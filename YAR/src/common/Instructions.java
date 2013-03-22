@@ -13,12 +13,12 @@ package common;
  * and so on...
  */
 public class Instructions {
-	public int d1;
-	public int w1;
-	public int w2;
-	public boolean isOffense;
-	public int bx;
-	public int by;
-	public double omega;
+	public int d1 = 0;
+	public int w1 = 0;
+	public int w2 = 0;
+	public boolean isOffense = true;
+	public int bx = 0;
+	public int by = 0;
+	public double omega = 0;
 	
 }

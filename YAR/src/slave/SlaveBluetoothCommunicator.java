@@ -8,6 +8,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import lejos.nxt.LCD;
+import lejos.nxt.Sound;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import common.IDefender;
@@ -28,11 +30,10 @@ public class SlaveBluetoothCommunicator {
 	private IDefender defender;
 
 	private BTConnection conn;
-	private PrintStream out;
+	private DataOutputStream out;
 	private DataInputStream in;
 
-	public SlaveBluetoothCommunicator(ILauncher launcher,
-			IDefender defender) {
+	public SlaveBluetoothCommunicator(ILauncher launcher, IDefender defender) {
 		this.launcher = launcher;
 		this.defender = defender;
 		this.conn = null;
@@ -43,11 +44,14 @@ public class SlaveBluetoothCommunicator {
 	 * handle incoming requests in a continuous loop.
 	 */
 	public void handleRequests() {
-		// TODO
+		LCD.clear(0);
+		LCD.drawString("Unconnected", 0, 0);
 		Bluetooth.setFriendlyName(Protocol.SLAVE_NAME);
 		// Connect with master
 		conn = Bluetooth.waitForConnection();
-		out = new PrintStream(conn.openDataOutputStream());
+		LCD.clear(0);
+		LCD.drawString("Connected", 0, 0);
+		out = conn.openDataOutputStream();
 		in = conn.openDataInputStream();
 
 		// Handle requests
@@ -67,27 +71,31 @@ public class SlaveBluetoothCommunicator {
 					break;
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Sound.buzz();
+				LCD.clear(6);
+				LCD.drawString("IOException: " + e.getMessage(), 0, 6);
 			}
 		}
 	}
 
 	private void handleUpdateInstructionsRequest() {
+		LCD.clear(0);
+		LCD.drawString("Received instructions", 0, 0);
 		Instructions inst = ParseInstructions.parse(in);
 		launcher.updateInstructions(inst);
+		LCD.drawString("w1: " + inst.w1, 0, 1);
 	}
-	
+
 	private void handleLaunchRequest() {
 		this.launcher.launch();
 		this.launcher.retract();
 	}
 
-	private void handleLaunchPositionRequest() {
+	private void handleLaunchPositionRequest() throws IOException {
 		this.launcher.calculateLaunchPosition();
-		out.println(this.launcher.getLaunchX());
-		out.println(this.launcher.getLaunchY());
-		out.println(this.launcher.getLaunchTheta());
+		out.writeDouble(this.launcher.getLaunchX());
+		out.writeDouble(this.launcher.getLaunchY());
+		out.writeDouble(this.launcher.getLaunchTheta());
 		out.flush();
 	}
 

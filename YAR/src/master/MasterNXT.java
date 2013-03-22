@@ -3,6 +3,8 @@
  */
 package master;
 
+import java.io.IOException;
+
 import common.IDefender;
 import common.Instructions;
 import common.ParseInstructions;
@@ -10,6 +12,7 @@ import common.ParseInstructions;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
 import master.USLocalizer.LocalizationType;
 
@@ -52,12 +55,17 @@ public class MasterNXT {
 		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input
 										// stream
 		// Send instructions to slave brick
-		// TODO uncomment MasterBluetoothCommunicator.InitializeConnection()
-		// TODO uncomment MasterBluetoothCommunicator.sendInstructions(instructions);
+		instructions.w1 = 54;
+		MasterBluetoothCommunicator.InitializeConnection();
+		try {
+			MasterBluetoothCommunicator.sendInstructions(instructions);
+		} catch (IOException e) {
+			Sound.buzz();
+		}
 
 		// Localize robot and go to the center of the corner tile
 		//localizer.doLocalization();
-		nav.travelTo(60, 0);
+		//nav.travelTo(60, 0);
 
 		if (instructions.isOffense) {
 			// On offense

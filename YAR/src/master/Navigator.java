@@ -67,13 +67,13 @@ public abstract class Navigator extends Thread implements INavigator {
 			error = minimizeAngle(angle - pos[2]);
 
 			if (error < -180.0) {
-				this.robot.setRotationSpeed(ROTATION_SPEED);
+				this.robot.setRotationSpeed(-ROTATION_SPEED);
 			} else if (error < 0.0) {
-				this.robot.setRotationSpeed(-ROTATION_SPEED);
-			} else if (error > 180.0) {
 				this.robot.setRotationSpeed(ROTATION_SPEED);
-			} else {
+			} else if (error > 180.0) {
 				this.robot.setRotationSpeed(-ROTATION_SPEED);
+			} else {
+				this.robot.setRotationSpeed(ROTATION_SPEED);
 			}
 		}
 		

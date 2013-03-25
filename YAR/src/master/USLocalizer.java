@@ -25,7 +25,7 @@ public class USLocalizer {
 		FALLING_EDGE, RISING_EDGE
 	};
 
-	public static int ROTATION_SPEED = 90;
+	public static int ROTATION_SPEED = 110;
 	public static int WALL_DIST = 40;
 	public static int NOISE = 1;
 	public static int TRESH_HOLD = 7;
@@ -119,7 +119,7 @@ public class USLocalizer {
 			// angleA is clockwise from angleB, so assume the average of the
 			// angles to the right of angleB is 45 degrees past 'north'
 
-			double offset = -6.9;
+			double offset = 0;
 			if (angleA > angleB) {
 
 				LCD.clear();

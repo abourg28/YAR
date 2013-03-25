@@ -1,5 +1,3 @@
-package master;
-
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
@@ -16,6 +14,7 @@ import lejos.util.Delay;
  * 
  */
 public class LineDetector {
+	private final double TOL = 5;		//our tolerance of our heading, in degrees
 	private static Odometer odometer;
 	private final int SPEED = 70;
 	LightSensor leftLS = new LightSensor(SensorPort.S1, true);
@@ -34,13 +33,14 @@ public class LineDetector {
 	}
 
 	public void advanceToIntersection() {
+
 		// Advance a bit not to read the previous intersection
 		rightMotor.setSpeed(SPEED);
 		leftMotor.setSpeed(SPEED);
 		rightMotor.forward();
 		leftMotor.forward();
 		Delay.msDelay(1500);
-		
+
 		while (true) {
 			if ((leftLine.onLine == true && rightLine.onLine == false)) {
 				rightMotor.setSpeed(SPEED);
@@ -53,6 +53,7 @@ public class LineDetector {
 				leftMotor.setSpeed(0);
 				rightMotor.setSpeed(0);
 				Delay.msDelay(1000);
+				updatePos();		//before exiting, update the position of the robot
 				return;
 			} else if ((leftLine.onLine == false && rightLine.onLine == true)) {
 				leftMotor.setSpeed(SPEED);
@@ -65,13 +66,27 @@ public class LineDetector {
 				rightMotor.setSpeed(0);
 				leftMotor.setSpeed(0);
 				Delay.msDelay(1000);
+				updatePos();			//before exiting, update the position of the robot
 				return;
-			} else if (rightLine.onLine == true
-					&& leftLine.onLine == true) {
+			} else if (rightLine.onLine == true && leftLine.onLine == true) {
+				updatePos();			//before exiting, update the position of the robot
 				return;
 			}
 			Delay.msDelay(100);
 
 		}
+	}
+
+	public void updatePos() {
+		
+		double heading = odometer.getTheta();		//determine which direction we are heading in
+
+		if (Math.abs(heading - 0) < TOL || (Math.abs(heading - 180) < TOL))			//if heading in x direction, update x
+		{
+			odometer.setX(Math.round(odometer.getX() / 30) * 30);				//use round function to round up or down the number of squares passed, then multiply by 30 for cm traveled
+		}
+		if (Math.abs(heading - 90) < TOL || (Math.abs(heading - 270) < TOL)) 	//same for y direction
+		{odometer.setY(Math.round(odometer.getY() / 30) * 30);}
+
 	}
 }

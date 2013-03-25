@@ -214,16 +214,6 @@ public class BlockNavigator extends Navigator {
 		super.turnTo(angle);
 	}
 
-	// method used for moving a specific distance
-	private static int convertDistance(double radius, double distance) {
-		return (int) ((180.0 * distance) / (Math.PI * radius));
-	}
-
-	// methode used for moving a specific distance
-	private static int convertAngle(double radius, double width, double angle) {
-		return convertDistance(radius, Math.PI * width * angle / 360.0);
-	}
-
 	// Methode for turning 90 degrees counterclockwise
 	private void turnNinety() {
 		this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);

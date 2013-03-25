@@ -11,7 +11,7 @@ import lejos.nxt.LCD;
 public abstract class Navigator extends Thread implements INavigator {
 
 	final static double DEG_ERR = 4.0, CM_ERR = 5.0;
-	final static int FORWARD_SPEED = 40, ROTATION_SPEED = 20;
+	final static int FORWARD_SPEED = 40, ROTATION_SPEED = 110;
 	
 	protected Odometer odo;
 	protected boolean isNavigating;
@@ -54,30 +54,24 @@ public abstract class Navigator extends Thread implements INavigator {
 
 	@Override
 	public void turnTo(double angle) {
-
-		double[] pos = new double[3];
-		this.odo.getPosition(pos);
-		double error = minimizeAngle(angle - pos[2]);
-		
-
-		while (Math.abs(error) > DEG_ERR) {
-//			LCD.drawString("Angle:" + angle + "  ", 0, 4);
-//			LCD.drawString("Error:" + error + "   ", 0, 5);
-			this.odo.getPosition(pos);
-			error = minimizeAngle(angle - pos[2]);
-
-			if (error < -180.0) {
-				this.robot.setRotationSpeed(-ROTATION_SPEED);
-			} else if (error < 0.0) {
-				this.robot.setRotationSpeed(ROTATION_SPEED);
-			} else if (error > 180.0) {
-				this.robot.setRotationSpeed(-ROTATION_SPEED);
-			} else {
-				this.robot.setRotationSpeed(ROTATION_SPEED);
-			}
+		isNavigating = true;
+		double theta = odo.getTheta();
+		theta = angle - theta;
+		theta = theta % (2 * Math.PI);
+		if (theta > Math.PI) {
+			// theta larger than 180 degrees
+			theta = theta - 2 * Math.PI;
+		} else if (theta < -Math.PI) {
+			// theta smaller than -180 degrees
+			theta = theta + 2 * Math.PI;
 		}
-		
-		this.robot.setSpeeds(0, 0);
+
+		robot.getLeftMotor().setSpeed(ROTATION_SPEED);
+		robot.getRightMotor().setSpeed(ROTATION_SPEED);
+
+		robot.getLeftMotor().rotate(-convertAngle(IRobot.LEFT_WHEEL_RADIUS, IRobot.WHEEL_WIDTH, theta), true);
+		robot.getRightMotor().rotate(convertAngle(IRobot.RIGHT_WHEEL_RADIUS, IRobot.WHEEL_WIDTH, theta), false);
+		isNavigating = false;
 	}
 
 	@Override
@@ -85,16 +79,11 @@ public abstract class Navigator extends Thread implements INavigator {
 		return this.isNavigating;
 	}
 	
-	private double minimizeAngle(double error) {
-		error = error % (360);
-		if (error > 180) {
-			// Gives us small negative angle instead of large positive angle
-			error = error - 360;
-		} else if (error < -180) {
-			// Gives us small positive angle instead of large negative angle
-			error = error + 360;
-		}
-		return error;
+	protected static int convertAngle(double radius, double width, double angle) {
+		return convertDistance(radius, width * angle / 2);
 	}
 
+	protected static int convertDistance(double radius, double distance) {
+		return (int) ((180.0 * distance) / (Math.PI * radius));
+	}
 }

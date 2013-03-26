@@ -1,3 +1,5 @@
+package master;
+
 import lejos.nxt.*;
 
 public class Launcher 

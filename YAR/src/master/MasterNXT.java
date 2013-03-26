@@ -8,6 +8,7 @@ import java.io.IOException;
 import common.IDefender;
 import common.Instructions;
 import common.ParseInstructions;
+import common.PlayerRole;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
@@ -67,7 +68,7 @@ public class MasterNXT {
 		localizer.doLocalization();
 		//nav.travelTo(60, 0);
 		
-		if (instructions.isOffense) {
+		if (instructions.role == PlayerRole.ATTACKER) {
 			// On offense
 			// Obtain launch position (send request to other brick)
 			// Offensive loop

@@ -56,6 +56,9 @@ public class USLocalizer {
 		filterControl = 0;
 	}
 
+	/**
+	 * Localize to the intersection two tiles away from the corner.
+	 */
 	public void doLocalization() {
 		double[] pos = new double[3];
 		double[] pos2 = new double[3];
@@ -207,9 +210,17 @@ public class USLocalizer {
 				odo.setY(0);
 				odo.setTheta(90);
 
-			}
-
+			} 
 		}
+		
+		// Go to intersection
+		BlockNavigator blockNav = (BlockNavigator) nav;
+		LCD.drawString("Casted nav", 0, 4);
+		blockNav.travelToNearestIntersection();
+		LCD.drawString("Travelled to intersection", 0, 4);
+		odo.setX(60);
+		odo.setY(60);
+		
 	}
 
 	private int getFilteredData() {

@@ -65,12 +65,8 @@ public class MasterNXT {
 
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
-//		nav.travelTo(60, 0);
-		nav.turnTo(20);
-		nav.turnTo(40);
-		nav.turnTo(20);
-		nav.turnTo(0);
-		nav.turnTo(300);
+		//nav.travelTo(60, 0);
+		
 		if (instructions.isOffense) {
 			// On offense
 			// Obtain launch position (send request to other brick)

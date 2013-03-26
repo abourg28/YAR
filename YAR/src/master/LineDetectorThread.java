@@ -67,7 +67,7 @@ public class LineDetectorThread extends Thread {
 
 			// beeps when sensor detects line,
 			if (delta1 < 2 && (delta2 > 2) || (delta3 > 2) || (delta4 > 2)) {
-				Sound.beep();
+
 
 				onLine = true;
 				

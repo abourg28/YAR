@@ -95,7 +95,7 @@ public class BlockNavigator extends Navigator {
 		}
 		turnTo(xHead);
 		headNow = odo.getTheta();
-		
+
 		int counter = 0;
 
 		// Travel vertically loop (while not at destination row)
@@ -217,12 +217,12 @@ public class BlockNavigator extends Navigator {
 	// Methode for turning 90 degrees counterclockwise
 	private void turnNinety() {
 		this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-		this.robot.getLeftMotor()
-				.rotate(-convertAngle(robot.LEFT_WHEEL_RADIUS,
-						robot.WHEEL_WIDTH, 90.0), true);
-		this.robot.getRightMotor()
-				.rotate(convertAngle(robot.RIGHT_WHEEL_RADIUS,
-						robot.WHEEL_WIDTH, 90.0), false);
+		this.robot.getLeftMotor().rotate(
+				-convertAngle(IRobot.LEFT_WHEEL_RADIUS, IRobot.WHEEL_WIDTH,
+						90.0), true);
+		this.robot.getRightMotor().rotate(
+				convertAngle(IRobot.RIGHT_WHEEL_RADIUS, IRobot.WHEEL_WIDTH,
+						90.0), false);
 	}
 
 }

@@ -206,6 +206,13 @@ public class BlockNavigator extends Navigator {
 	 */
 	private Pos getCenterOfTile(double x, double y) {
 		// TODO
+		double[] corner1 = new double[2];
+		
+		//determine x values first of corner
+		corner1[1] = (x/30) - ((x%30)/30);
+		//determine y value of first corner
+		corner1[2] = (y/30) - ((y%30)/30);
+		//put it into a position?
 		return null;
 	}
 

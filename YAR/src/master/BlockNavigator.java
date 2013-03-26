@@ -40,7 +40,7 @@ public class BlockNavigator extends Navigator {
 		this.headNow = odo.getTheta();
 		this.xNow = odo.getX();
 		this.yNow = odo.getY();
-		this.detector = new LineDetector(odo);
+		this.detector = new LineDetector(odo, robot);
 	}
 
 	/**
@@ -77,13 +77,42 @@ public class BlockNavigator extends Navigator {
 		return destCoord;
 	}
 
+	public void travelToNearestIntersection() {
+		double closeIntersectionX = calculateDestination(odo.getX());
+		double closeIntersectionY = calculateDestination(odo.getY());
+
+		// Find whether closest intersection is left or right
+		if (odo.getX() <= closeIntersectionX) {
+			xHead = 180;
+		} else {
+			xHead = 0;
+		}
+
+		turnTo(xHead);
+		LCD.clear(4);
+		LCD.drawString("About to advance", 0, 4);
+		detector.advanceToIntersection();
+		LCD.clear(4);
+		LCD.drawString("Advanced", 0, 4);
+
+		// Find whether closest intersection is up or down
+		if (odo.getY() <= closeIntersectionY) {
+			yHead = 90;
+		} else {
+			yHead = 270;
+		}
+
+		turnTo(yHead);
+		detector.advanceToIntersection();
+
+	}
+
 	@Override
 	public void travelTo(double x, double y) {
 
 		this.isNavigating = true;
 		int dir;
-
-		// TODO get to intersection
+		travelToNearestIntersection();
 
 		destRow = calculateDestination(x);
 
@@ -202,13 +231,10 @@ public class BlockNavigator extends Navigator {
 
 	// Methode for turning 90 degrees counterclockwise
 	private void turnNinety() {
-		this.robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-		this.robot.getLeftMotor().rotate(
-				-convertAngle(IRobot.LEFT_WHEEL_RADIUS, IRobot.WHEEL_WIDTH,
-						90.0), true);
-		this.robot.getRightMotor().rotate(
-				convertAngle(IRobot.RIGHT_WHEEL_RADIUS, IRobot.WHEEL_WIDTH,
-						90.0), false);
+		double l = IRobot.LEFT_WHEEL_RADIUS, r = IRobot.RIGHT_WHEEL_RADIUS, w = IRobot.WHEEL_WIDTH;
+		robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
+		robot.getLeftMotor().rotate(-convertAngle(l, w, 90.0), true);
+		robot.getRightMotor().rotate(convertAngle(r, w, 90.0), false);
 	}
 
 }

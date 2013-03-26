@@ -195,20 +195,6 @@ public class BlockNavigator extends Navigator {
 		super.travelTo(x, y);
 	}
 
-	/**
-	 * Calculates the position of the center of the tile encapsulating x and y.
-	 * 
-	 * @param x
-	 *            X position indicating the tile of interest.
-	 * @param y
-	 *            Y position indicating the tile of interest.
-	 * @return The position of the center of the tile of interests.
-	 */
-	private Pos getCenterOfTile(double x, double y) {
-		// TODO
-		return null;
-	}
-
 	@Override
 	public void turnTo(double angle) {
 		super.turnTo(angle);

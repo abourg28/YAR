@@ -22,7 +22,7 @@ import master.USLocalizer.LocalizationType;
  * 
  */
 public class MasterNXT {
-	
+
 	private static SensorPort usPort = SensorPort.S4;
 	private static SensorPort leftLsPort = SensorPort.S1;
 	private static SensorPort rightLsPort = SensorPort.S2;
@@ -36,10 +36,11 @@ public class MasterNXT {
 		IRobot robot = new YARRobot();
 		UltrasonicSensor us = new UltrasonicSensor(usPort);
 		USPoller poller = new USPoller(us);
-		Odometer odo = new Odometer(robot, true, poller);
+		Odometer odo = new Odometer(robot);
 		OdometryDisplay disp = new OdometryDisplay(odo);
-		INavigator nav = odo.getNavigator();
-		USLocalizer localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
+		INavigator nav = BlockNavigator.getInstance(robot, odo, poller);
+		USLocalizer localizer = new USLocalizer(odo, us,
+				LocalizationType.FALLING_EDGE, nav);
 
 		// clear the display
 		LCD.clear();
@@ -53,22 +54,31 @@ public class MasterNXT {
 		disp.start();
 
 		// Receive instructions from server
-		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input
-										// stream
+		// TODO uncomment ParseInstructions.parse(null); // Replace null with
+		// the data input
+		// stream
 		// Send instructions to slave brick
 		instructions.w1 = 54;
-//		MasterBluetoothCommunicator.InitializeConnection();
-//		try {
-//			MasterBluetoothCommunicator.sendInstructions(instructions);
-//		} catch (IOException e) {
-//			Sound.buzz();
-//		}
+		// MasterBluetoothCommunicator.InitializeConnection();
+		// try {
+		// MasterBluetoothCommunicator.sendInstructions(instructions);
+		// } catch (IOException e) {
+		// Sound.buzz();
+		// }
 
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
-		//nav.travelTo(66, 13);
-		//nav.travelTo(60, 60);
-		
+		nav.turnTo(0);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			Sound.buzz();
+		}
+		nav.turnTo(90);
+		// nav.travelTo(66, 13);
+		// nav.travelTo(60, 60);
+
 		if (instructions.role == PlayerRole.ATTACKER) {
 			// On offense
 			// Obtain launch position (send request to other brick)

@@ -1,138 +1,172 @@
 package master;
 
-import lejos.util.Timer;
-import lejos.util.TimerListener;
+import lejos.nxt.Motor;
 
-/**
- * Keeps track of the robots position as it moves.
- * 
- * @author alex
- * 
+/*
+ * Odometer.java
  */
-public class Odometer implements TimerListener {
-	public static final int DEFAULT_PERIOD = 15;
-	private IRobot robot;
-	private Timer odometerTimer;
-	private INavigator nav;
-	// position data
-	private Object lock;
+
+public class Odometer extends Thread {
+	// robot position
 	private double x, y, theta;
-	private double[] oldDH, dDH;
 
-	public Odometer(IRobot robot, int period, boolean start, USPoller uspoller) {
-		// initialise variables
-		this.robot = robot;
-		this.nav = BlockNavigator.getInstance(robot, this, uspoller);
-		odometerTimer = new Timer(period, this);
-		x = 0.0;
-		y = 0.0;
-		theta = 0.0;
-		oldDH = new double[2];
-		dDH = new double[2];
-		lock = new Object();
+	// odometer update period, in ms
+	private static final long ODOMETER_PERIOD = 25;
+	private double wheelRadius;
+	private double widthRobot;
 
-		// start the odometer immediately, if necessary
-		if (start)
-			odometerTimer.start();
+	// lock object for mutual exclusion
+	private Object lock;
+
+	private double deltaAngleLeft;
+	private double deltaAngleRight;
+	private double displacementAngleRobot;
+	private double displacementMagnitudeRobot;
+	private double dLeft;
+	private double dRight;
+	private int currentLeftTacho;
+	private int currentRightTacho;
+	private int oldLeftTacho = 0;
+	private int oldRightTacho = 0;
+	private IRobot robot;
+
+	// default constructor
+	public Odometer(IRobot robot) { // default constructor for odometer takes in
+									// the Radius of wheel and Width of robot
+		this.widthRobot = IRobot.WHEEL_WIDTH;
+		this.wheelRadius = IRobot.LEFT_WHEEL_RADIUS;
+		this.setRobot(robot);
 	}
 
-	public Odometer(IRobot robot, USPoller uspoller) {
-		this(robot, DEFAULT_PERIOD, false, uspoller);
+	// run method (required for Thread)
+	public void run() {
+		long updateStart, updateEnd;
+
+		while (true) {
+			updateStart = System.currentTimeMillis();
+			// gets current degree
+			currentLeftTacho = Motor.A.getTachoCount();
+			currentRightTacho = Motor.B.getTachoCount();
+			// change in angle
+			deltaAngleLeft = currentLeftTacho - oldLeftTacho;
+			deltaAngleRight = currentRightTacho - oldRightTacho;
+			// calculates the change in distance of the left and right wheel
+			// traveled
+			dLeft = deltaAngleLeft * Math.PI * wheelRadius / 180;
+			dRight = deltaAngleRight * Math.PI * wheelRadius / 180;
+			// changes the old one to become the new one
+			oldLeftTacho = currentLeftTacho;
+			oldRightTacho = currentRightTacho;
+			// finds the magnitude by checking how much the left wheel changed
+			// with respect to the right wheel
+			// find the angle by seeing how much the left angle changed compared
+			// to the right angle
+			// counter clockwise being positive and clockwise being negative
+			displacementMagnitudeRobot = (dLeft + dRight) / 2;
+			displacementAngleRobot = (deltaAngleRight - deltaAngleLeft)
+					* wheelRadius / widthRobot;
+
+			synchronized (lock) {
+				x = x
+						+ displacementMagnitudeRobot
+						* Math.sin((theta + displacementAngleRobot / 2)
+								* (Math.PI / 180));
+
+				y = y
+						+ displacementMagnitudeRobot
+						* Math.cos((theta + displacementAngleRobot / 2)
+								* (Math.PI / 180));
+
+				theta = (theta + displacementAngleRobot);
+				if (theta < 0) {
+					theta = theta + 360;
+				}
+				if (theta > 360) { // reset the angle to zero when it reaches
+									// more than 360 degrees
+					theta = 0;
+				}
+				// makes sure everything is between zero and 360
+			}
+
+			// this ensures that the odometer only runs once every period
+			updateEnd = System.currentTimeMillis();
+			if (updateEnd - updateStart < ODOMETER_PERIOD) {
+				try {
+					Thread.sleep(ODOMETER_PERIOD - (updateEnd - updateStart));
+				} catch (InterruptedException e) {
+					// there is nothing to be done here because it is not
+					// expected that the odometer will be interrupted by
+					// another thread
+				}
+			}
+		}
 	}
 
-	public Odometer(IRobot robot, boolean start, USPoller uspoller) {
-		this(robot, DEFAULT_PERIOD, start, uspoller);
-	}
+	public double getX() {
+		double result;
 
-	public Odometer(IRobot robot, int period, USPoller uspoller) {
-		this(robot, period, false, uspoller);
-	}
-
-	public void timedOut() {
-		robot.getDisplacementAndHeading(dDH);
-		dDH[0] -= oldDH[0];
-		dDH[1] -= oldDH[1];
-
-		// update the position in a critical region
 		synchronized (lock) {
-			theta += dDH[1];
-			theta = fixDegAngle(theta);
-
-			x += dDH[0] * Math.sin(Math.toRadians(theta));
-			y += dDH[0] * Math.cos(Math.toRadians(theta));
+			result = x;
 		}
 
-		oldDH[0] += dDH[0];
-		oldDH[1] += dDH[1];
+		return result;
 	}
 
-	// accessors
-	public void getPosition(double[] pos) {
+	public double getY() {
+		double result;
+
 		synchronized (lock) {
-			pos[0] = x;
-			pos[1] = y;
-			pos[2] = theta;
+			result = y;
+		}
+
+		return result;
+	}
+
+	public double getTheta() {
+		double result;
+
+		synchronized (lock) {
+			result = theta;
+		}
+
+		return result;
+	}
+
+	public void getPosition(double[] position, boolean[] update) {
+		// ensure that the values don't change while the odometer is running
+		synchronized (lock) {
+			if (update[0])
+				position[0] = x;
+			if (update[1])
+				position[1] = y;
+			if (update[2])
+				position[2] = theta;
 		}
 	}
 
-	public synchronized double getTheta() {
-		return theta;
+	public void setX(double x) {
+		synchronized (lock) {
+			this.x = x;
+		}
 	}
 
-	public synchronized double getX() {
-		return x;
+	public void setY(double y) {
+		synchronized (lock) {
+			this.y = y;
+		}
 	}
 
-	public synchronized double getY() {
-		return y;
+	public void setTheta(double theta) {
+		synchronized (lock) {
+			this.theta = theta;
+		}
 	}
 
 	public IRobot getRobot() {
 		return robot;
 	}
 
-	public INavigator getNavigator() {
-		return this.nav;
-	}
-
-	// mutators
-	public void setX(double x) {
-		setPosition(new double[]{x,0,0}, new boolean[]{true,false,false});
-	}
-	
-	public void setY(double y) {
-		setPosition(new double[]{0,y,0}, new boolean[]{false,true,false});
-	}
-	
-	public void setTheta(double theta) {
-		setPosition(new double[]{0,0,theta}, new boolean[]{false,false,true});
-	}
-
-	public void setPosition(double[] pos, boolean[] update) {
-		synchronized (lock) {
-			if (update[0])
-				x = pos[0];
-			if (update[1])
-				y = pos[1];
-			if (update[2])
-				theta = pos[2];
-		}
-	}
-
-	// static 'helper' methods
-	public static double fixDegAngle(double angle) {
-		if (angle < 0.0)
-			angle = 360.0 + (angle % 360.0);
-
-		return angle % 360.0;
-	}
-
-	public static double minimumAngleFromTo(double a, double b) {
-		double d = fixDegAngle(b - a);
-
-		if (d < 180.0)
-			return d;
-		else
-			return d - 360.0;
+	public void setRobot(IRobot robot) {
+		this.robot = robot;
 	}
 }

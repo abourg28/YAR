@@ -28,11 +28,9 @@ public abstract class Navigator extends Thread implements INavigator {
 	@Override
 	public void travelTo(double x, double y) {
 		double minAng = 0;
-		double[] pos = new double[3];
-		this.odo.getPosition(pos);
 
-		double dy = y - pos[1];
-		double dx = x - pos[0];
+		double dy = y - odo.getY();
+		double dx = x - odo.getX();
 		// LCD.drawString("Turning !!    ", 0, 6);
 
 		if (dx > 0) {
@@ -49,8 +47,8 @@ public abstract class Navigator extends Thread implements INavigator {
 		// LCD.drawString("Going Forward!!", 0, 6);
 		this.robot.setForwardSpeed(FORWARD_SPEED);
 
-		while (Math.abs(x - pos[0]) > CM_ERR || Math.abs(y - pos[1]) > CM_ERR) {
-			this.odo.getPosition(pos);
+		while (Math.abs(x - odo.getX()) > CM_ERR || Math.abs(y - odo.getY()) > CM_ERR) {
+		
 		}
 		this.robot.setSpeeds(0, 0);
 	}
@@ -60,14 +58,12 @@ public abstract class Navigator extends Thread implements INavigator {
 		isNavigating = true;
 		Sound.beep();
 
-		double[] pos = new double[3];
-		this.odo.getPosition(pos);
-		double error = minimizeAngle(angle - pos[2]);
+		
+		double error = minimizeAngle(angle - odo.getTheta());
 
 		// LCD.drawString("Angle:" + angle + "  ", 0, 4);
 		// LCD.drawString("Error:" + error + "   ", 0, 5);
-		this.odo.getPosition(pos);
-		error = minimizeAngle(angle - pos[2]);
+		error = minimizeAngle(angle - odo.getTheta());
 		
 		if (error > DEG_ERR && error <= 180) {
 			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
@@ -83,8 +79,7 @@ public abstract class Navigator extends Thread implements INavigator {
 		}
 
 		while (Math.abs(error) > DEG_ERR) {
-			this.odo.getPosition(pos);
-			error = minimizeAngle(angle - pos[2]);
+			error = minimizeAngle(angle - odo.getTheta());
 		}
 		
 		this.robot.getLeftMotor().setSpeed(0);

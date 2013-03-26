@@ -47,11 +47,11 @@ public class USLocalizer {
 	private int notVisibleCount = 0;
 
 	public USLocalizer(Odometer odo, UltrasonicSensor us,
-			LocalizationType locType) {
+			LocalizationType locType, INavigator nav) {
 		this.odo = odo;
 		this.robot = odo.getRobot();
 		this.locType = locType;
-		this.nav = odo.getNavigator();
+		this.nav = nav;
 		this.us = us;
 		filterControl = 0;
 	}

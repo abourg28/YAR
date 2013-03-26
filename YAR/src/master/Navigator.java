@@ -71,15 +71,15 @@ public abstract class Navigator extends Thread implements INavigator {
 		
 		if (error > DEG_ERR && error <= 180) {
 			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getLeftMotor().forward();
-			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getRightMotor().backward();			
-		}
-		if (error >= -180 && error < DEG_ERR) {
-			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
 			this.robot.getLeftMotor().backward();
 			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
 			this.robot.getRightMotor().forward();			
+		}
+		if (error >= -180 && error < DEG_ERR) {
+			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
+			this.robot.getLeftMotor().forward();
+			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
+			this.robot.getRightMotor().backward();			
 		}
 
 		while (Math.abs(error) > DEG_ERR) {

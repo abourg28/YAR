@@ -73,7 +73,7 @@ public class YARRobot implements IRobot {
 		rightTacho = rightMotor.getTachoCount();
 		
 		data[0] = (leftTacho * LEFT_WHEEL_RADIUS + rightTacho * RIGHT_WHEEL_RADIUS) *	Math.PI / 360.0;
-		data[1] = (leftTacho * LEFT_WHEEL_RADIUS - rightTacho * RIGHT_WHEEL_RADIUS) / WHEEL_WIDTH;
+		data[1] = (-leftTacho * LEFT_WHEEL_RADIUS + rightTacho * RIGHT_WHEEL_RADIUS) / WHEEL_WIDTH;
 	}
 	
 	public double getDisplacement() {

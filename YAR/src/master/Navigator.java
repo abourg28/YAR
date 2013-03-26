@@ -12,7 +12,7 @@ import lejos.nxt.Sound;
  */
 public abstract class Navigator extends Thread implements INavigator {
 
-	final static double DEG_ERR = 4.0, CM_ERR = 5.0;
+	final static double DEG_ERR = 2.0, CM_ERR = 2.0;
 	final static int FORWARD_SPEED = 40, ROTATION_SPEED = 110;
 
 	protected Odometer odo;

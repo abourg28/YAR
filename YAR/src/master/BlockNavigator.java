@@ -112,7 +112,7 @@ public class BlockNavigator extends Navigator {
 
 		this.isNavigating = true;
 		int dir;
-		travelToNearestIntersection();
+//		travelToNearestIntersection();
 
 		destRow = calculateDestination(x);
 

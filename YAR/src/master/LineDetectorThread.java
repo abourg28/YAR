@@ -66,7 +66,7 @@ public class LineDetectorThread extends Thread {
 			delta4 = lightValue - d;
 
 			// beeps when sensor detects line,
-			if (delta1 < 2 && (delta2 > 2) || (delta3 > 2) || (delta4 > 2)) {
+			if (delta1 < 4 && (delta2 > 4) || (delta3 > 4) || (delta4 > 4)) {
 
 
 				onLine = true;

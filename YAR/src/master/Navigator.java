@@ -68,31 +68,20 @@ public abstract class Navigator extends Thread implements INavigator {
 		// LCD.drawString("Error:" + error + "   ", 0, 5);
 		this.odo.getPosition(pos);
 		error = minimizeAngle(angle - pos[2]);
-
-		if (error < -180.0) {
-
-			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getLeftMotor().backward();
-			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getRightMotor().forward();
-
-		} else if (error < 0.0) {
-			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getLeftMotor().forward();
-			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getRightMotor().backward();
-		} else if (error > 180.0) {
-			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getLeftMotor().backward();
-			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getRightMotor().forward();
-		} else {
-			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getLeftMotor().forward();
-			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
-			this.robot.getRightMotor().backward();
-		}
 		
+		if (error > DEG_ERR && error <= 180) {
+			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
+			this.robot.getLeftMotor().forward();
+			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
+			this.robot.getRightMotor().backward();			
+		}
+		if (error >= -180 && error < DEG_ERR) {
+			this.robot.getLeftMotor().setSpeed(ROTATION_SPEED);
+			this.robot.getLeftMotor().backward();
+			this.robot.getRightMotor().setSpeed(ROTATION_SPEED);
+			this.robot.getRightMotor().forward();			
+		}
+
 		while (Math.abs(error) > DEG_ERR) {
 			this.odo.getPosition(pos);
 			error = minimizeAngle(angle - pos[2]);

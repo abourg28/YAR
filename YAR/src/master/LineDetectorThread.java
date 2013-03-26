@@ -49,7 +49,7 @@ public class LineDetectorThread extends Thread {
 			if (currentMotor == 0) {
 				currentMotor = 1;
 			}
-			DelayConstant = 25;
+			DelayConstant = 22;
 			lightValue = ls.getLightValue();
 			Delay.msDelay((int) DelayConstant);
 			a = ls.getLightValue();

@@ -1,6 +1,7 @@
 *.class
 *.nxj
 *.nxd
+YAR/bin/*
 
 # Package Files #
 *.jar

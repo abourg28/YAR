@@ -81,8 +81,8 @@ public class SlaveBluetoothCommunicator {
 	private void handleUpdateInstructionsRequest() {
 		LCD.clear(0);
 		LCD.drawString("Received instructions", 0, 0);
-		//Instructions inst = ParseInstructions.parse(in);
-		//launcher.updateInstructions(inst);
+		Instructions inst = ParseInstructions.parse(in);
+		launcher.updateInstructions(inst);
 		//LCD.drawString("w1: " + inst.w1, 0, 1);
 	}
 

@@ -23,7 +23,7 @@ import master.USLocalizer.LocalizationType;
  * 
  */
 public class MasterNXT {
-	
+
 	private static SensorPort usPort = SensorPort.S4;
 	private static SensorPort leftLsPort = SensorPort.S1;
 	private static SensorPort rightLsPort = SensorPort.S2;
@@ -38,8 +38,9 @@ public class MasterNXT {
 		USPoller poller = new USPoller(us);
 		Odometer odo = new Odometer(robot, true, poller);
 		OdometryDisplay disp = new OdometryDisplay(odo);
-		INavigator nav = odo.getNavigator();
-		USLocalizer localizer = new USLocalizer(odo, us, LocalizationType.FALLING_EDGE);
+		INavigator nav = BlockNavigator.getInstance(robot, odo, poller);
+		USLocalizer localizer = new USLocalizer(odo, us,
+				LocalizationType.FALLING_EDGE);
 
 		// clear the display
 		LCD.clear();
@@ -48,16 +49,18 @@ public class MasterNXT {
 		// float
 		LCD.drawString("Press any button ", 0, 0);
 		LCD.drawString("    to start     ", 0, 1);
-		
-		BluetoothConnection bt = new BluetoothConnection();
-		Instructions instructions = bt.getInstructions();
 
 		Button.waitForAnyPress();
 		disp.start();
 
+		// BluetoothConnection bt = new BluetoothConnection();
+		// Instructions instructions = bt.getInstructions();
+		Instructions instructions = new Instructions(2, 9);
+
 		// Receive instructions from server
-		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input
-										// stream
+		// TODO uncomment ParseInstructions.parse(null); // Replace null with
+		// the data input
+		// stream
 		// Send instructions to slave brick
 		MasterBluetoothCommunicator.InitializeConnection();
 		try {
@@ -69,23 +72,25 @@ public class MasterNXT {
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
 		try {
-			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
-			nav.travelTo(p.x, p.y);
-			nav.turnTo(p.theta);
+			// Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+			// nav.travelTo(p.x, p.y);
+			// nav.turnTo(p.theta);
+			nav.travelTo(90, 120);
+			nav.turnTo(90);
+			MasterBluetoothCommunicator.sendLaunchRequest();
+			Thread.sleep(1000);
 			nav.travelTo(30, 30);
 		} catch (NumberFormatException e1) {
 			Sound.buzz();
 		} catch (IOException e1) {
 			Sound.buzz();
-		}
-		try {
-			MasterBluetoothCommunicator.sendLaunchRequest();
-		} catch (IOException e) {
+		} catch (InterruptedException e) {
 			Sound.buzz();
 		}
-		//nav.travelTo(66, 13);
-		//nav.travelTo(60, 60);
-		
+
+		// nav.travelTo(66, 13);
+		// nav.travelTo(60, 60);
+
 		if (true) {
 			// On offense
 			// Obtain launch position (send request to other brick)

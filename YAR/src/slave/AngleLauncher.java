@@ -30,6 +30,7 @@ public class AngleLauncher implements ILauncher {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.inst = new Instructions();
+		this.range = 6;
 	}
 	
 	/**
@@ -80,31 +81,29 @@ public class AngleLauncher implements ILauncher {
 	public void calculateLaunchPosition() 
 	{
 		// TODO Auto-generated method stub
-//		int xGoal = inst.w1+1;		//to be changed in final
-//		int yGoal = inst.w2+1;		//to be changed in final
-//		int distToHoop = inst.d1;
-//		int xCoord = xGoal*30;
-//		int yCoord = (yGoal-distToHoop)*30;
-//		x = xCoord;
-//		y = yCoord;
-//		theta = 90;
-//		range = distToHoop;
+		int xGoal = inst.goalX+1;		//to be changed in final
+		int yGoal = inst.goalY+1;		//to be changed in final
+		int distToHoop = 5;				//launches from 5 squares
+		int xCoord = xGoal*30;
+		int yCoord = (yGoal-distToHoop)*30;
+		x = xCoord;
+		y = yCoord;
+		theta = 90;
+		range = distToHoop;
 		
 	}
 
 	public double getLaunchX() {
-		// TODO Auto-generated method stub
-		return 0;
+		return x;
 	}
 
 	public double getLaunchY() {
-		// TODO Auto-generated method stub
-		return 0;
+		return y;
 	}
 
 	public double getLaunchTheta() {
 		// TODO Auto-generated method stub
-		return 0;
+		return theta;
 	}
 
 	public void updateInstructions(Instructions inst) {

@@ -130,22 +130,22 @@ public class BlockNavigator extends Navigator {
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-				// While there is an obstacle
-				while (us.isObjectInRange(US_RANGE)) {
-					// Turn dir
-					turnTo(odo.getTheta() + dir);
-					if (us.isObjectInRange(US_RANGE)) {
-						dir = -dir;
-						turnTo(odo.getTheta() + dir);
-					} else {
-						// Advance one tile
-						advanceATile();
-						turnTo(odo.getTheta() - dir);
-					}
-				}// end while there is an obstacle
-				advanceATile();
-				this.travelTo(x, y);
-				return;
+//				// While there is an obstacle
+//				while (us.isObjectInRange(US_RANGE)) {
+//					// Turn dir
+//					turnTo(odo.getTheta() + dir);
+//					if (us.isObjectInRange(US_RANGE)) {
+//						dir = -dir;
+//						turnTo(odo.getTheta() + dir);
+//					} else {
+//						// Advance one tile
+//						advanceATile();
+//						turnTo(odo.getTheta() - dir);
+//					}
+//				}// end while there is an obstacle
+//				advanceATile();
+//				this.travelTo(x, y);
+//				return;
 			}
 			// move forward one tile
 			advanceATile();
@@ -169,22 +169,22 @@ public class BlockNavigator extends Navigator {
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-
-				// While there is an obstacle
-				while (us.isObjectInRange(US_RANGE)) {
-					// Turn dir
-					turnTo(odo.getTheta() + dir);
-					if (us.isObjectInRange(US_RANGE)) {
-						dir = -dir;
-						turnTo(odo.getTheta() + dir);
-					} else {
-						advanceATile();
-						turnTo(odo.getTheta() - dir);
-					}
-				}// end while obstacle
-				advanceATile();
-				this.travelTo(x, y);
-				return;
+//
+//				// While there is an obstacle
+//				while (us.isObjectInRange(US_RANGE)) {
+//					// Turn dir
+//					turnTo(odo.getTheta() + dir);
+//					if (us.isObjectInRange(US_RANGE)) {
+//						dir = -dir;
+//						turnTo(odo.getTheta() + dir);
+//					} else {
+//						advanceATile();
+//						turnTo(odo.getTheta() - dir);
+//					}
+//				}// end while obstacle
+//				advanceATile();
+//				this.travelTo(x, y);
+//				return;
 			}
 			// move forward one tile
 			advanceATile();

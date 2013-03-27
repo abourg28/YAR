@@ -44,8 +44,10 @@ public class MasterBluetoothCommunicator {
 			throws IOException {
 		out.writeInt(Protocol.UPDATE_INSTRUCTIONS_REQUEST);
 		out.flush();
-		// out.println(instructions);
-		// out.flush();
+		out.writeInt(instructions.goalX);
+		out.writeChar(',');
+		out.writeInt(instructions.goalY);
+		out.flush();
 	}
 
 	public static Pos sendLaunchPositionRequest() throws NumberFormatException,

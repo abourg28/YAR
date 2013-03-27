@@ -173,8 +173,8 @@ public class USLocalizer {
 			while (getFilteredData() < 60) {
 			}
 			double angleA1 = odo.getTheta();
-			robot.getLeftMotor().stop();
-			robot.getRightMotor().stop();
+			robot.getLeftMotor().setSpeed(0);
+			robot.getRightMotor().setSpeed(0);
 			robot.getLeftMotor().setSpeed(ROTATION_SPEED);
 			robot.getRightMotor().setSpeed(ROTATION_SPEED);
 			robot.getLeftMotor().backward();

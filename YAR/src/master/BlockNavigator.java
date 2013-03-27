@@ -25,11 +25,6 @@ public class BlockNavigator extends Navigator {
 	private USPoller us;
 	double ROTATE_SPEED = 60;
 	public final double FORWARD_SPEED = 60;
-	private double headNow;
-	private double xNow;
-	private double yNow;
-	private double xHead, yHead;
-	private double destRow;
 	private double destCol;
 
 	private BlockNavigator(IRobot robot, Odometer odo, USPoller uspoller) {
@@ -37,9 +32,6 @@ public class BlockNavigator extends Navigator {
 		this.odo = odo;
 		this.robot = robot;
 		this.us = uspoller;
-		this.headNow = odo.getTheta();
-		this.xNow = odo.getX();
-		this.yNow = odo.getY();
 		this.setDetector(new LineDetector(odo, robot));
 	}
 
@@ -81,6 +73,8 @@ public class BlockNavigator extends Navigator {
 		double closeIntersectionX = calculateDestination(odo.getX());
 		double closeIntersectionY = calculateDestination(odo.getY());
 
+		int xHead;
+		int yHead;
 		// Find whether closest intersection is left or right
 		if (odo.getX() <= closeIntersectionX) {
 			xHead = 0;
@@ -112,18 +106,18 @@ public class BlockNavigator extends Navigator {
 
 		this.isNavigating = true;
 		int dir;
-//		travelToNearestIntersection();
+		// travelToNearestIntersection();
 
-		destRow = calculateDestination(y);
-
+		double destRow = calculateDestination(y);
+		double xHead, yHead;
+		
 		// check if we need to go up or down
-		if (yNow < destRow) {
+		if (odo.getY() < destRow) {
 			yHead = 90;
 		} else {
 			yHead = 270;
 		}
 		turnTo(yHead);
-		headNow = odo.getTheta();
 
 		int counter = 0;
 
@@ -152,23 +146,21 @@ public class BlockNavigator extends Navigator {
 				advanceATile();
 				this.travelTo(x, y);
 				return;
-			} else {
-				// move forward one tile
-				advanceATile();
 			}
+			// move forward one tile
+			advanceATile();
 
 			// are we at the row?
 		}// end Travel vertically loop
 
 		destCol = calculateDestination(x);
 		// check if we need to go left or right
-		if (xNow < destCol) {
+		if (odo.getX() < destCol) {
 			xHead = 0;
 		} else {
 			xHead = 180;
 		}
 		turnTo(xHead);
-		headNow = odo.getTheta();
 
 		// Travel horizontally loop (while not at destination column)
 		while (!isAt(destCol, odo.getX())) {
@@ -193,10 +185,9 @@ public class BlockNavigator extends Navigator {
 				advanceATile();
 				this.travelTo(x, y);
 				return;
-			} else {
-				// move forward one tile
-				advanceATile();
 			}
+			// move forward one tile
+			advanceATile();
 
 		}// end Travel horizontally loop
 

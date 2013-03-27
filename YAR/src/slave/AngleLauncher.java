@@ -79,8 +79,8 @@ public class AngleLauncher implements ILauncher {
 	public void calculateLaunchPosition() 
 	{
 		// TODO Auto-generated method stub
-		int xGoal = 6;
-		int yGoal = 11;
+		int xGoal = inst.w1+1;		//to be changed in final
+		int yGoal = inst.w2+1;		//to be changed in final
 		int distToHoop = inst.d1;
 		int xCoord = xGoal*30;
 		int yCoord = (yGoal-distToHoop)*30;

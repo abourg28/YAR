@@ -33,11 +33,31 @@ public class AngleLauncher implements ILauncher {
 	/**
 	 * Rotates the catapult to launch projectile.
 	 */
-	public void launch() {
-		Motor.A.setSpeed(750);
-		Motor.C.setSpeed(750);
-		Motor.A.rotateTo(110,true);
-		Motor.C.rotateTo(110,false);
+	public void launch(int range) {
+			int launchspeed = (150*range)-350;
+			Motor.A.setSpeed(120);
+			Motor.B.setSpeed(120);
+			Motor.A.rotateTo(-20,false);
+			Motor.C.rotateTo(-20,true);
+			try {
+			    Thread.sleep(500);		
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+			//fire the ball after 
+			Motor.A.setSpeed(launchspeed);
+			Motor.C.setSpeed(launchspeed);
+			Motor.A.rotateTo(110,true);
+			Motor.C.rotateTo(110,false);
+			Sound.beepSequence();
+
+
+			Motor.A.setSpeed(120);
+			Motor.B.setSpeed(120);
+			Motor.A.rotateTo(0,true);
+			Motor.C.rotateTo(0,false);
+			Motor.A.stop();
+			Motor.B.stop();
 	}
 
 	/**

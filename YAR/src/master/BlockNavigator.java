@@ -114,21 +114,21 @@ public class BlockNavigator extends Navigator {
 		int dir;
 //		travelToNearestIntersection();
 
-		destRow = calculateDestination(x);
+		destRow = calculateDestination(y);
 
 		// check if we need to go up or down
-		if (xNow < destRow) {
-			xHead = 90;
+		if (yNow < destRow) {
+			yHead = 90;
 		} else {
-			xHead = 270;
+			yHead = 270;
 		}
-		turnTo(xHead);
+		turnTo(yHead);
 		headNow = odo.getTheta();
 
 		int counter = 0;
 
 		// Travel vertically loop (while not at destination row)
-		while (!isAt(destRow, odo.getX())) {
+		while (!isAt(destRow, odo.getY())) {
 			LCD.drawString("Counter " + counter, 0, 4);
 			counter++;
 			// Initialize to left
@@ -160,18 +160,18 @@ public class BlockNavigator extends Navigator {
 			// are we at the row?
 		}// end Travel vertically loop
 
-		destCol = calculateDestination(y);
+		destCol = calculateDestination(x);
 		// check if we need to go left or right
-		if (yNow < destCol) {
-			yHead = 0;
+		if (xNow < destCol) {
+			xHead = 0;
 		} else {
-			yHead = 180;
+			xHead = 180;
 		}
-		turnTo(yHead);
+		turnTo(xHead);
 		headNow = odo.getTheta();
 
 		// Travel horizontally loop (while not at destination column)
-		while (!isAt(destCol, odo.getY())) {
+		while (!isAt(destCol, odo.getX())) {
 			// Initialize to left
 			dir = 90;
 

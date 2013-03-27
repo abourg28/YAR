@@ -32,7 +32,6 @@ public class MasterNXT {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Instructions instructions = new Instructions();
 		IRobot robot = new YARRobot();
 		UltrasonicSensor us = new UltrasonicSensor(usPort);
 		USPoller poller = new USPoller(us);
@@ -48,6 +47,9 @@ public class MasterNXT {
 		// float
 		LCD.drawString("Press any button ", 0, 0);
 		LCD.drawString("    to start     ", 0, 1);
+		
+		BluetoothConnection bt = new BluetoothConnection();
+		Instructions instructions = bt.getInstructions();
 
 		Button.waitForAnyPress();
 		disp.start();
@@ -56,7 +58,6 @@ public class MasterNXT {
 		// TODO uncomment ParseInstructions.parse(null); // Replace null with the data input
 										// stream
 		// Send instructions to slave brick
-		instructions.w1 = 54;
 		MasterBluetoothCommunicator.InitializeConnection();
 		try {
 			MasterBluetoothCommunicator.sendInstructions(instructions);
@@ -76,7 +77,7 @@ public class MasterNXT {
 		//nav.travelTo(66, 13);
 		//nav.travelTo(60, 60);
 		
-		if (instructions.role == PlayerRole.ATTACKER) {
+		if (true) {
 			// On offense
 			// Obtain launch position (send request to other brick)
 			// Offensive loop

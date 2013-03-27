@@ -20,33 +20,7 @@ package common;
  */
 
 public class Instructions {
-	/**
-	 * The role, Defender or Attacker
-	 */
-	public PlayerRole role;
-	/**
-	 * Ball dispenser X tile position
-	 */
-	public int bx;
-	/**
-	 * Ball dispenser Y tile position
-	 */
-	public int by;
-	/**
-	 * Defender zone dimension 1
-	 */
-	public int w1;
-	/**
-	 * Defender zone dimension 2
-	 */
-	public int w2;
-	/**
-	 * Forward line distance from goal
-	 */
-	public int d1;
-	/**
-	 * starting corner, 1 through 4
-	 */
-	public StartCorner startingCorner;
-	
+
+	public int goalX;
+	public int goalY;
 }

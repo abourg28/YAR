@@ -21,34 +21,24 @@ import lejos.nxt.LCD;
 public class ParseInstructions {
 	
 	public static Instructions parse (DataInputStream dis) {
-		Instructions inst = null;
+		Instructions trans = null;
 		try {
 			
 			while (dis.available() <= 0)
 				Thread.sleep(10); // spin waiting for data
 			
-			inst = new Instructions();
-			inst.role = PlayerRole.lookupRole(dis.readInt());
+			trans = new Instructions();
+			trans.goalX = dis.readInt();
 			ignore(dis);
-			inst.startingCorner = StartCorner.lookupCorner(dis.readInt());
-			ignore(dis);
-			inst.bx = dis.readInt();
-			ignore(dis);
-			inst.by = dis.readInt();
-			ignore(dis);
-			inst.w1 = dis.readInt();
-			ignore(dis);
-			inst.w2 = dis.readInt();
-			ignore(dis);
-			inst.d1 = dis.readInt();
+			trans.goalY = dis.readInt();
 			
-			return inst;
+			return trans;
 		} catch (IOException e) {
 			// failed to read transmitted data
 			LCD.drawString("IO Ex", 0, 7);
-			return inst;
+			return trans;
 		} catch (InterruptedException e) {
-			return inst;
+			return trans;
 		}
 		
 	}

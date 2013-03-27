@@ -28,7 +28,7 @@ public class LauncherV1
   
   void launchBall(int range)
   {
-			int launchspeed = (102*range)-50;
+			int launchspeed = (150*range)-350;
 			Motor.A.setSpeed(120);
 			Motor.B.setSpeed(120);
 			Motor.A.rotateTo(-20,false);

@@ -22,6 +22,7 @@ public class AngleLauncher implements ILauncher {
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
 	private Instructions inst;
+	private int range;
 	
 	public AngleLauncher (NXTRegulatedMotor leftMotor,
 						   NXTRegulatedMotor rightMotor) {
@@ -33,7 +34,7 @@ public class AngleLauncher implements ILauncher {
 	/**
 	 * Rotates the catapult to launch projectile.
 	 */
-	public void launch(int range) {
+	public void launch() {
 			int launchspeed = (150*range)-350;
 			Motor.A.setSpeed(120);
 			Motor.B.setSpeed(120);
@@ -75,8 +76,18 @@ public class AngleLauncher implements ILauncher {
 	/**
 	 * Update the x, y, and theta according to parameters.
 	 */
-	public void calculateLaunchPosition() {
+	public void calculateLaunchPosition() 
+	{
 		// TODO Auto-generated method stub
+		int xGoal = 6;
+		int yGoal = 11;
+		int distToHoop = inst.d1;
+		int xCoord = xGoal*30;
+		int yCoord = (yGoal-distToHoop)*30;
+		x = xCoord;
+		y = yCoord;
+		theta = 90;
+		range = distToHoop;
 		
 	}
 

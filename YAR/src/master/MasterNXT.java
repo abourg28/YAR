@@ -9,6 +9,7 @@ import common.IDefender;
 import common.Instructions;
 import common.ParseInstructions;
 import common.PlayerRole;
+import common.Pos;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
@@ -67,8 +68,16 @@ public class MasterNXT {
 
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
-		nav.travelTo(60, 90);
-		nav.turnTo(90);
+		try {
+			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+			nav.travelTo(p.x, p.y);
+			nav.turnTo(p.theta);
+			nav.travelTo(30, 30);
+		} catch (NumberFormatException e1) {
+			Sound.buzz();
+		} catch (IOException e1) {
+			Sound.buzz();
+		}
 		try {
 			MasterBluetoothCommunicator.sendLaunchRequest();
 		} catch (IOException e) {

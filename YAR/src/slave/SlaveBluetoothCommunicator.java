@@ -81,17 +81,23 @@ public class SlaveBluetoothCommunicator {
 	private void handleUpdateInstructionsRequest() {
 		LCD.clear(0);
 		LCD.drawString("Received instructions", 0, 0);
-		Instructions inst = ParseInstructions.parse(in);
-		launcher.updateInstructions(inst);
-		LCD.drawString("w1: " + inst.w1, 0, 1);
+		//Instructions inst = ParseInstructions.parse(in);
+		//launcher.updateInstructions(inst);
+		//LCD.drawString("w1: " + inst.w1, 0, 1);
 	}
 
 	private void handleLaunchRequest() {
+		LCD.clear(0);
+		LCD.drawString("Received launch request", 0, 0);
 		this.launcher.launch();
+		LCD.clear(0);
+		LCD.drawString("Launched", 0, 0);
 		this.launcher.retract();
 	}
 
 	private void handleLaunchPositionRequest() throws IOException {
+		LCD.clear(0);
+		LCD.drawString("Received launch position request", 0, 0);
 		this.launcher.calculateLaunchPosition();
 		out.writeDouble(this.launcher.getLaunchX());
 		out.writeDouble(this.launcher.getLaunchY());

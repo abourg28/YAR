@@ -126,7 +126,7 @@ public class BlockNavigator extends Navigator {
 			LCD.drawString("Counter " + counter, 0, 4);
 			counter++;
 			// Initialize to left
-			dir = 90;
+			dir = -90;
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {

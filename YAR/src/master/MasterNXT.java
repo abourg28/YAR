@@ -57,17 +57,22 @@ public class MasterNXT {
 										// stream
 		// Send instructions to slave brick
 		instructions.w1 = 54;
-//		MasterBluetoothCommunicator.InitializeConnection();
-//		try {
-//			MasterBluetoothCommunicator.sendInstructions(instructions);
-//		} catch (IOException e) {
-//			Sound.buzz();
-//		}
+		MasterBluetoothCommunicator.InitializeConnection();
+		try {
+			MasterBluetoothCommunicator.sendInstructions(instructions);
+		} catch (IOException e) {
+			Sound.buzz();
+		}
 
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
-		nav.travelTo(90, 90);
-		nav.travelTo(90, 30);
+		nav.travelTo(60, 90);
+		nav.turnTo(90);
+		try {
+			MasterBluetoothCommunicator.sendLaunchRequest();
+		} catch (IOException e) {
+			Sound.buzz();
+		}
 		//nav.travelTo(66, 13);
 		//nav.travelTo(60, 60);
 		

@@ -5,6 +5,7 @@ package slave;
 
 import common.Instructions;
 
+import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 
 
@@ -33,16 +34,22 @@ public class AngleLauncher implements ILauncher {
 	 * Rotates the catapult to launch projectile.
 	 */
 	public void launch() {
-		// TODO Auto-generated method stub
-		
+		Motor.A.setSpeed(750);
+		Motor.C.setSpeed(750);
+		Motor.A.rotateTo(110,true);
+		Motor.C.rotateTo(110,false);
 	}
 
 	/**
 	 * Rotates the catapult back to original position
 	 */
 	public void retract() {
-		// TODO Auto-generated method stub
-		
+		Motor.A.setSpeed(120);
+		Motor.B.setSpeed(120);
+		Motor.A.rotateTo(0,true);
+		Motor.C.rotateTo(0,false);
+		Motor.A.stop();
+		Motor.B.stop();
 	}
 
 	/**
@@ -69,7 +76,7 @@ public class AngleLauncher implements ILauncher {
 	}
 
 	public void updateInstructions(Instructions inst) {
-		this.inst = inst;		
+		this.inst = inst;	
 	}
 
 }

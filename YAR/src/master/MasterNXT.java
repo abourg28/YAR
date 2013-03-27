@@ -53,8 +53,8 @@ public class MasterNXT {
 		Button.waitForAnyPress();
 		disp.start();
 
-		// BluetoothConnection bt = new BluetoothConnection();
-		// Instructions instructions = bt.getInstructions();
+//		BluetoothConnection bt = new BluetoothConnection();
+//		Instructions instructions = bt.getInstructions();
 		Instructions instructions = new Instructions(2, 9);
 
 		// Receive instructions from server
@@ -72,13 +72,13 @@ public class MasterNXT {
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
 		try {
-			// Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
-			// nav.travelTo(p.x, p.y);
-			// nav.turnTo(p.theta);
-			nav.travelTo(90, 120);
-			nav.turnTo(90);
+			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+			nav.travelTo(p.x, p.y);
+			nav.turnTo(p.theta);
+//			nav.travelTo(90, 120);
+//			nav.turnTo(90);
 			MasterBluetoothCommunicator.sendLaunchRequest();
-			Thread.sleep(1000);
+			Thread.sleep(3000);
 			nav.travelTo(30, 30);
 		} catch (NumberFormatException e1) {
 			Sound.buzz();

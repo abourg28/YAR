@@ -14,7 +14,7 @@ public interface IRobot {
 	// Robot variables
 	public static final double LEFT_WHEEL_RADIUS = 2.74;
 	public static final double RIGHT_WHEEL_RADIUS = 2.74;
-	public static final double WHEEL_WIDTH = 15.01;
+	public static final double WHEEL_WIDTH = 15.11;
 	
 	public void setForwardSpeed(double speed);
 	public void setRotationSpeed(double speed);

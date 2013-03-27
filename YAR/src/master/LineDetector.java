@@ -51,7 +51,7 @@ public class LineDetector {
 		
 		if (delay) {
 			// Advance a bit not to read the previous intersection
-			Delay.msDelay(1500);
+			Delay.msDelay(2000);
 		}
 
 		while (true) {

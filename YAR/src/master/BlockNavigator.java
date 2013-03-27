@@ -40,7 +40,7 @@ public class BlockNavigator extends Navigator {
 		this.headNow = odo.getTheta();
 		this.xNow = odo.getX();
 		this.yNow = odo.getY();
-		this.detector = new LineDetector(odo, robot);
+		this.setDetector(new LineDetector(odo, robot));
 	}
 
 	/**
@@ -83,27 +83,27 @@ public class BlockNavigator extends Navigator {
 
 		// Find whether closest intersection is left or right
 		if (odo.getX() <= closeIntersectionX) {
-			xHead = 180;
-		} else {
 			xHead = 0;
+		} else {
+			xHead = 180;
 		}
 
 		turnTo(xHead);
 		LCD.clear(4);
 		LCD.drawString("About to advance", 0, 4);
-		detector.advanceToIntersection();
+		getDetector().advanceToIntersection();
 		LCD.clear(4);
 		LCD.drawString("Advanced", 0, 4);
 
 		// Find whether closest intersection is up or down
 		if (odo.getY() <= closeIntersectionY) {
-			yHead = 90;
-		} else {
 			yHead = 270;
+		} else {
+			yHead = 90;
 		}
 
 		turnTo(yHead);
-		detector.advanceToIntersection();
+		getDetector().advanceToIntersection();
 
 	}
 
@@ -206,7 +206,7 @@ public class BlockNavigator extends Navigator {
 	}// end travelTo
 
 	private void advanceATile() {
-		this.detector.advanceToIntersection();
+		this.getDetector().advanceToIntersection();
 	}
 
 	private boolean isAt(double destCoord, double coord) {
@@ -235,6 +235,14 @@ public class BlockNavigator extends Navigator {
 		robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
 		robot.getLeftMotor().rotate(-convertAngle(l, w, 90.0), true);
 		robot.getRightMotor().rotate(convertAngle(r, w, 90.0), false);
+	}
+
+	public LineDetector getDetector() {
+		return detector;
+	}
+
+	private void setDetector(LineDetector detector) {
+		this.detector = detector;
 	}
 
 }

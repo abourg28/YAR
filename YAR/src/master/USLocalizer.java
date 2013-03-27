@@ -84,9 +84,9 @@ public class USLocalizer {
 			// Sound.playTone(1200,150);
 			// robot is now not facing any wall.
 			LCD.drawString("US: " + us.getDistance(), 0, 4);
-			while (getFilteredData() < 64) {
+			while (getFilteredData() < 54) {
 			}
-			while (getFilteredData() > 62) {
+			while (getFilteredData() > 50) {
 			}
 			Sound.beep();
 			robot.getLeftMotor().stop();
@@ -104,9 +104,9 @@ public class USLocalizer {
 
 			// switch direction and wait until it sees no wall
 			// keep rotating until the robot sees a wall, then latch the angle
-			while (getFilteredData() < 64) {
+			while (getFilteredData() < 54) {
 			}
-			while (getFilteredData() > 62) {
+			while (getFilteredData() > 50) {
 			}
 			Sound.playTone(1200, 150);
 
@@ -122,7 +122,7 @@ public class USLocalizer {
 			// angleA is clockwise from angleB, so assume the average of the
 			// angles to the right of angleB is 45 degrees past 'north'
 
-			double offset = 0;
+			double offset = -90;
 			if (angleA > angleB) {
 
 				LCD.clear();
@@ -193,7 +193,7 @@ public class USLocalizer {
 				LCD.drawString("" + (((angleA1 + angleB1) / 2) + 135), 0, 6);
 
 				nav.turnTo(360 - Math.abs((360 - angleB1)
-						- Math.abs(45 - (angleA1 + (360 - angleB1)) / 2)) - 180);
+						- Math.abs(45 - (angleA1 + (360 - angleB1)) / 2)) - 180+180);
 
 				Sound.playTone(1200, 150);
 				odo.setX(0);
@@ -203,7 +203,7 @@ public class USLocalizer {
 				LCD.clear();
 
 				nav.turnTo(360 - Math.abs((360 - angleB1)
-						- Math.abs(45 - (angleA1 + (360 - angleB1)) / 2)));
+						- Math.abs(45 - (angleA1 + (360 - angleB1)) / 2))+180);
 				Sound.playTone(1200, 150);
 
 				odo.setX(0);
@@ -216,10 +216,14 @@ public class USLocalizer {
 		// Go to intersection
 		BlockNavigator blockNav = (BlockNavigator) nav;
 		LCD.drawString("Casted nav", 0, 4);
-		blockNav.travelToNearestIntersection();
-		LCD.drawString("Travelled to intersection", 0, 4);
+//		blockNav.travelToNearestIntersection();
+		nav.turnTo(0);
+		blockNav.getDetector().advanceToIntersection();
 		odo.setX(60);
+		nav.turnTo(90);
+		blockNav.getDetector().advanceToIntersection();
 		odo.setY(60);
+		LCD.drawString("Travelled to intersection", 0, 4);
 		
 	}
 

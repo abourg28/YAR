@@ -23,7 +23,7 @@ public class BlockNavigator extends Navigator {
 	private static Odometer odo;
 	private IRobot robot;
 	private USPoller us;
-	double ROTATE_SPEED = 60;
+	double ROTATE_SPEED = 110;
 	public final double FORWARD_SPEED = 60;
 	private double destCol;
 
@@ -72,6 +72,7 @@ public class BlockNavigator extends Navigator {
 	public void travelToNearestIntersection() {
 		double closeIntersectionX = calculateDestination(odo.getX());
 		double closeIntersectionY = calculateDestination(odo.getY());
+		
 
 		int xHead;
 		int yHead;

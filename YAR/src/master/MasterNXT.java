@@ -55,23 +55,26 @@ public class MasterNXT {
 
 //		BluetoothConnection bt = new BluetoothConnection();
 //		Instructions instructions = bt.getInstructions();
-		Instructions instructions = new Instructions(2, 9);
+		//sInstructions instructions = new Instructions(2, 9);
 
 		// Receive instructions from server
 		// TODO uncomment ParseInstructions.parse(null); // Replace null with
 		// the data input
 		// stream
 		// Send instructions to slave brick
-		MasterBluetoothCommunicator.InitializeConnection();
-		try {
+		//MasterBluetoothCommunicator.InitializeConnection();
+		/*try {
 			MasterBluetoothCommunicator.sendInstructions(instructions);
 		} catch (IOException e) {
 			Sound.buzz();
 		}
+		*/
 
 		// Localize robot and go to the center of the corner tile
-		localizer.doLocalization();
-		try {
+		//localizer.doLocalization();
+		nav.turnTo(90);
+
+		/*try {
 			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
 			nav.travelTo(p.x, p.y);
 			nav.turnTo(p.theta);
@@ -87,9 +90,11 @@ public class MasterNXT {
 		} catch (InterruptedException e) {
 			Sound.buzz();
 		}
+		*/
 
 		// nav.travelTo(66, 13);
-		// nav.travelTo(60, 60);
+		 nav.travelTo(30, 120);
+	
 
 		if (true) {
 			// On offense

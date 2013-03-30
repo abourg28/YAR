@@ -76,12 +76,16 @@ public class LineDetector {
 				}
 
 				Sound.playTone(100, 100);
+				
 				rightMotor.setSpeed(0);
 				leftMotor.setSpeed(0);
+				
+				
 				Delay.msDelay(1000);
 				updatePos(); // before exiting, update the position of the robot
 				return;
-			} else if (rightLine.onLine == true && leftLine.onLine == true) {
+			}
+			 else if (rightLine.onLine == true && leftLine.onLine == true) {
 				updatePos(); // before exiting, update the position of the robot
 				return;
 			}
@@ -91,6 +95,18 @@ public class LineDetector {
 	}
 
 	public void updatePos() {
+		if (odometer.getTheta() <190 && odometer.getTheta()>170){
+			odometer.setTheta(180);
+		}
+		else if (odometer.getTheta() <10  || odometer.getTheta()>350){
+			odometer.setTheta(0);
+		}
+		else if (odometer.getTheta() <100 && odometer.getTheta()>80){
+			odometer.setTheta(90);
+		}
+		else if (odometer.getTheta()<280 && odometer.getTheta()<280){
+			odometer.setTheta(270);
+		}
 
 		double heading = odometer.getTheta(); // determine which direction we
 												// are heading in
@@ -124,6 +140,7 @@ public class LineDetector {
 		{
 			odometer.setY(Math.round(odometer.getY() / 30) * 30);
 		}
+		
 
 	}
 }

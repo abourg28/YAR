@@ -13,19 +13,22 @@ import lejos.nxt.comm.RConsole;
  * horizontal blocks.
  * 
  * @author alex
+ * @author 
  * 
  */
 public class BlockNavigator extends Navigator {
 
-	private final double US_RANGE = 35;
+	private final int US_RANGE = 35;
 	private LineDetector detector;
 	private static INavigator nav;
 	private static Odometer odo;
 	private IRobot robot;
 	private USPoller us;
+
 	double ROTATE_SPEED = 110;
 	public final double FORWARD_SPEED = 60;
 	private double destCol;
+	private static SensorPort usPort = SensorPort.S4;
 
 	private BlockNavigator(IRobot robot, Odometer odo, USPoller uspoller) {
 		super(robot, odo);
@@ -33,6 +36,7 @@ public class BlockNavigator extends Navigator {
 		this.robot = robot;
 		this.us = uspoller;
 		this.setDetector(new LineDetector(odo, robot));
+
 	}
 
 	/**
@@ -72,7 +76,7 @@ public class BlockNavigator extends Navigator {
 	public void travelToNearestIntersection() {
 		double closeIntersectionX = calculateDestination(odo.getX());
 		double closeIntersectionY = calculateDestination(odo.getY());
-		
+
 
 		int xHead;
 		int yHead;
@@ -104,6 +108,8 @@ public class BlockNavigator extends Navigator {
 
 	@Override
 	public void travelTo(double x, double y) {
+		UltrasonicSensor realUS =new UltrasonicSensor(usPort);
+		USPollerThread US = new USPollerThread(realUS,US_RANGE);
 
 		this.isNavigating = true;
 		int dir;
@@ -111,7 +117,7 @@ public class BlockNavigator extends Navigator {
 
 		double destRow = calculateDestination(y);
 		double xHead, yHead;
-		
+
 		// check if we need to go up or down
 		if (odo.getY() < destRow) {
 			yHead = 90;
@@ -123,7 +129,7 @@ public class BlockNavigator extends Navigator {
 		int counter = 0;
 
 		// Travel vertically loop (while not at destination row)
-		while (!isAt(destRow, odo.getY())) {
+		while (!isAt(destRow, odo.getY())&& US.obstacle==false) {
 			LCD.drawString("Counter " + counter, 0, 4);
 			counter++;
 			// Initialize to left
@@ -131,66 +137,83 @@ public class BlockNavigator extends Navigator {
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-//				// While there is an obstacle
-//				while (us.isObjectInRange(US_RANGE)) {
-//					// Turn dir
-//					turnTo(odo.getTheta() + dir);
-//					if (us.isObjectInRange(US_RANGE)) {
-//						dir = -dir;
-//						turnTo(odo.getTheta() + dir);
-//					} else {
-//						// Advance one tile
-//						advanceATile();
-//						turnTo(odo.getTheta() - dir);
-//					}
-//				}// end while there is an obstacle
-//				advanceATile();
-//				this.travelTo(x, y);
-//				return;
+				//				// While there is an obstacle
+				//				while (us.isObjectInRange(US_RANGE)) {
+				//					// Turn dir
+				//					turnTo(odo.getTheta() + dir);
+				//					if (us.isObjectInRange(US_RANGE)) {
+				//						dir = -dir;
+				//						turnTo(odo.getTheta() + dir);
+				//					} else {
+				//						// Advance one tile
+				//						advanceATile();
+				//						turnTo(odo.getTheta() - dir);
+				//					}
+				//				}// end while there is an obstacle
+				//				advanceATile();
+				//				this.travelTo(x, y);
+				//				return;
 			}
 			// move forward one tile
 			advanceATile();
 
 			// are we at the row?
 		}// end Travel vertically loop
-
-		destCol = calculateDestination(x);
-		// check if we need to go left or right
-		if (odo.getX() < destCol) {
-			xHead = 0;
-		} else {
-			xHead = 180;
+		if (US.obstacle==false){
+			destCol = calculateDestination(x);
+			// check if we need to go left or right
+			if (odo.getX() < destCol) {
+				xHead = 0;
+			} else {
+				xHead = 180;
+			}
+			turnTo(xHead);
 		}
-		turnTo(xHead);
 
 		// Travel horizontally loop (while not at destination column)
-		while (!isAt(destCol, odo.getX())) {
+		while (!isAt(destCol, odo.getX())&& US.obstacle==false) {
 			// Initialize to left
 			dir = 90;
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-//
-//				// While there is an obstacle
-//				while (us.isObjectInRange(US_RANGE)) {
-//					// Turn dir
-//					turnTo(odo.getTheta() + dir);
-//					if (us.isObjectInRange(US_RANGE)) {
-//						dir = -dir;
-//						turnTo(odo.getTheta() + dir);
-//					} else {
-//						advanceATile();
-//						turnTo(odo.getTheta() - dir);
-//					}
-//				}// end while obstacle
-//				advanceATile();
-//				this.travelTo(x, y);
-//				return;
+				//
+				//				// While there is an obstacle
+				//				while (us.isObjectInRange(US_RANGE)) {
+				//					// Turn dir
+				//					turnTo(odo.getTheta() + dir);
+				//					if (us.isObjectInRange(US_RANGE)) {
+				//						dir = -dir;
+				//						turnTo(odo.getTheta() + dir);
+				//					} else {
+				//						advanceATile();
+				//						turnTo(odo.getTheta() - dir);
+				//					}
+				//				}// end while obstacle
+				//				advanceATile();
+				//				this.travelTo(x, y);
+				//				return;
 			}
 			// move forward one tile
 			advanceATile();
 
 		}// end Travel horizontally loop
+		if (US.obstacle ==true){
+			dir = 90;
+			while (us.isObjectInRange(US_RANGE)) {
+				// Turn dir
+				turnTo(odo.getTheta() + dir);
+				if (us.isObjectInRange(US_RANGE)) {
+					dir = -dir;
+					turnTo(odo.getTheta() + dir);
+				} else {
+					advanceATile();
+					turnTo(odo.getTheta() - dir);
+				}
+			}// end while obstacle
+			advanceATile();
+			this.travelTo(x,y);	
+		}
 
 		simpleTravelTo(x, y);
 
@@ -219,14 +242,6 @@ public class BlockNavigator extends Navigator {
 	@Override
 	public void turnTo(double angle) {
 		super.turnTo(angle);
-	}
-
-	// Methode for turning 90 degrees counterclockwise
-	private void turnNinety() {
-		double l = IRobot.LEFT_WHEEL_RADIUS, r = IRobot.RIGHT_WHEEL_RADIUS, w = IRobot.WHEEL_WIDTH;
-		robot.setSpeeds(FORWARD_SPEED, ROTATE_SPEED);
-		robot.getLeftMotor().rotate(-convertAngle(l, w, 90.0), true);
-		robot.getRightMotor().rotate(convertAngle(r, w, 90.0), false);
 	}
 
 	public LineDetector getDetector() {

@@ -13,7 +13,7 @@ import lejos.nxt.Sound;
 public abstract class Navigator extends Thread implements INavigator {
 
 	final static double DEG_ERR = 1, CM_ERR = 2.0;
-	final static int FORWARD_SPEED = 40, ROTATION_SPEED = 110;
+	final static int FORWARD_SPEED = 70, ROTATION_SPEED = 110;
 
 	protected Odometer odo;
 	protected boolean isNavigating;
@@ -26,33 +26,17 @@ public abstract class Navigator extends Thread implements INavigator {
 	}
 
 	@Override
-	public void travelTo(double x, double y) {
-		double minAng = 0;
-		double[] pos = new double[3];
-		this.odo.getPosition(pos);
-
-		double dy = y - pos[1];
-		double dx = x - pos[0];
-		// LCD.drawString("Turning !!    ", 0, 6);
-
-		if (dx > 0) {
-			minAng = Math.atan(dy / dx) * (180.0 / Math.PI);
-		} else if (dx < 0 && dy > 0) {
-			minAng = (Math.atan(dy / dx) + Math.PI) * (180.0 / Math.PI);
-		} else if (dx < 0 && dy < 0) {
-			minAng = (Math.atan(dy / dx) - Math.PI) * (180.0 / Math.PI);
-		}
-
-		// Rotate
-		turnTo(-minAng);
-
-		// LCD.drawString("Going Forward!!", 0, 6);
-		this.robot.setForwardSpeed(FORWARD_SPEED);
-
-		while (Math.abs(x - pos[0]) > CM_ERR || Math.abs(y - pos[1]) > CM_ERR) {
-			this.odo.getPosition(pos);
-		}
-		this.robot.setSpeeds(0, 0);
+	public void travelTo(double x, double y){
+		double thetaGoTo= calcPathAngle(x,y);
+		turnTo(thetaGoTo);
+		robot.getLeftMotor().setSpeed(FORWARD_SPEED);
+		robot.getRightMotor().setSpeed(FORWARD_SPEED);
+		
+		double distance = calcPathDistance(x,y);
+		robot.getLeftMotor().rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,distance),true);
+		robot.getRightMotor().rotate(convertDistance(robot.RIGHT_WHEEL_RADIUS,distance),false);
+		
+		
 	}
 
 	@Override
@@ -104,6 +88,59 @@ public abstract class Navigator extends Thread implements INavigator {
 		}
 		return error;
 	}
+	double calcPathDistance(double DesiredX,double DesiredY){
+		double currentX = odo.getX();
+		double currentY= odo.getY();
+		return Math.sqrt((DesiredX-currentX)*(DesiredX-currentX)+(DesiredY-currentY)*(DesiredY-currentY));
+	
+	}
+	
+	double calcPathAngle(double DesiredX ,double DesiredY){
+		
+		double currentX= odo.getX();
+		double currentY= odo.getY();
+		
+		if (Math.abs(DesiredX-currentX)<4){
+			if ((DesiredX-currentX)<0){
+				return -90.00;
+			}
+			else{
+				return 90.00;
+			}
+		
+		}
+		
+		else if (Math.abs(DesiredY-currentY)<4){
+			if ((DesiredY-currentY)>0)
+			{
+				return 0.0;
+			}
+			else{
+				return 180.0;
+			}
+		}
+		
+		double degreeWant= Math.atan(Math.abs(DesiredY-currentY)/Math.abs(DesiredX-currentX))*180/Math.PI;
+		if (DesiredX-currentX>0 && DesiredY-currentY>0){//in the first octet
+			return  degreeWant;
+			
+		}
+		else if (DesiredX-currentX<0 && DesiredY-currentY>0){//in the second octet
+			return 180-degreeWant;
+		}
+		else if (DesiredX-currentX<0 && DesiredY-currentY<0){
+			return 180+degreeWant;
+		}
+			
+		else if (DesiredX-currentX>0 && DesiredY-currentY<0){//in the 4th octet
+			return -degreeWant;			
+		}
+		else {
+			return 0;
+		}
+	
+	}
+	
 
 	@Override
 	public boolean isNavigating() {

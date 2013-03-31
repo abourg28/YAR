@@ -19,15 +19,18 @@ public class LineDetector {
 	private final double TOL = 5; // our tolerance of our heading, in degrees
 	private static Odometer odometer;
 	private final int SPEED = 70;
+	private final int fast_SPEED = 250;
 	LightSensor leftLS = new LightSensor(SensorPort.S1, true);
 	LightSensor rightLS = new LightSensor(SensorPort.S2, true);
 	private static NXTRegulatedMotor leftMotor;
 	private static NXTRegulatedMotor rightMotor;
 	LineDetectorThread leftLine;
 	LineDetectorThread rightLine;
+	IRobot robot;
 
 	public LineDetector(Odometer odo, IRobot robot) {
 		odometer = odo;
+		this.robot = robot;
 		leftMotor = robot.getLeftMotor();
 		rightMotor = robot.getRightMotor();
 		leftLine = new LineDetectorThread(leftLS, odometer,
@@ -43,7 +46,12 @@ public class LineDetector {
 	}
 	
 	public void advanceToIntersection(boolean delay) {
-
+		//move a distance of 26 cm quickly first
+		rightMotor.setSpeed(fast_SPEED);
+		leftMotor.setSpeed(fast_SPEED);
+		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,25),true);
+		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,25),false);
+		//then slow down
 		rightMotor.setSpeed(SPEED);
 		leftMotor.setSpeed(SPEED);
 		rightMotor.forward();
@@ -142,5 +150,12 @@ public class LineDetector {
 		}
 		
 
+	}
+	protected static int convertAngle(double radius, double width, double angle) {
+		return convertDistance(radius, width * angle / 2);
+	}
+
+	protected static int convertDistance(double radius, double distance) {
+		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
 }

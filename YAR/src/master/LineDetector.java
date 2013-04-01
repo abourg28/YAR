@@ -49,8 +49,8 @@ public class LineDetector {
 		//move a distance of 26 cm quickly first
 		rightMotor.setSpeed(fast_SPEED);
 		leftMotor.setSpeed(fast_SPEED);
-		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,25),true);
-		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,25),false);
+		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,23),true);
+		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,23),false);
 		//then slow down
 		rightMotor.setSpeed(SPEED);
 		leftMotor.setSpeed(SPEED);
@@ -59,7 +59,7 @@ public class LineDetector {
 		
 		if (delay) {
 			// Advance a bit not to read the previous intersection
-			Delay.msDelay(2500);
+			Delay.msDelay(1000);
 		}
 
 		while (true) {

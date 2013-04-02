@@ -80,8 +80,8 @@ public class AngleLauncher implements ILauncher {
 	 */
 	public void calculateLaunchPosition() {
 		// TODO Auto-generated method stub
-		int xGoal = 0; // to be changed in final
-		int yGoal = 0; // to be changed in final
+		int xGoal = 5 + 1; // to be changed in final
+		int yGoal = 10 + 1; // to be changed in final
 		int distToHoop = 6; // launches from 5 squares
 		int xCoord = xGoal * 30;
 		int yCoord = (yGoal - distToHoop) * 30;

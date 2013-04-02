@@ -44,9 +44,19 @@ public class MasterBluetoothCommunicator {
 			throws IOException {
 		out.writeInt(Protocol.UPDATE_INSTRUCTIONS_REQUEST);
 		out.flush();
-		out.writeInt(instructions.goalX);
+		out.writeInt(instructions.role.getId());
 		out.writeChar(',');
-		out.writeInt(instructions.goalY);
+		out.writeInt(instructions.startingCorner.getId());
+		out.writeChar(',');
+		out.writeInt(instructions.bx);
+		out.writeChar(',');
+		out.writeInt(instructions.by);
+		out.writeChar(',');
+		out.writeInt(instructions.w1);
+		out.writeChar(',');
+		out.writeInt(instructions.w2);
+		out.writeChar(',');
+		out.writeInt(instructions.d1);
 		out.flush();
 	}
 

@@ -106,12 +106,12 @@ public class BlockNavigator extends Navigator {
 		}
 		turnTo(yHead);
 		
-		ultrasonicPollerThread.start();
+//		ultrasonicPollerThread.start();
 
 		int counter = 0;
 		
 		// Travel vertically loop (while not at destination row)
-		while (!isAt(destRow, odo.getY()) && ultrasonicPoller.obstacle) {
+		while (!isAt(destRow, odo.getY()) && ultrasonicPoller.obstacle==false) {
 			LCD.drawString("Counter " + counter, 0, 4);
 			counter++;
 			// Initialize to left

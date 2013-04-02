@@ -19,7 +19,7 @@ public class AngleLauncher implements ILauncher {
 
 	private double x;
 	private double y;
-	private double theta 90;
+	private double theta = 90;
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
 	private Instructions inst;

@@ -53,49 +53,43 @@ public class MasterNXT {
 		Button.waitForAnyPress();
 		disp.start();
 
-//		BluetoothConnection bt = new BluetoothConnection();
-//		Instructions instructions = bt.getInstructions();
-		//sInstructions instructions = new Instructions(2, 9);
-
 		// Receive instructions from server
-		// TODO uncomment ParseInstructions.parse(null); // Replace null with
-		// the data input
-		// stream
+		BluetoothConnection bt = new BluetoothConnection();
+		Instructions instructions = bt.getInstructions();
+		bt.printTransmission();
+//		Instructions instructions = new Instructions(2, 9);
+
 		// Send instructions to slave brick
-		//MasterBluetoothCommunicator.InitializeConnection();
-		/*try {
+		MasterBluetoothCommunicator.InitializeConnection();
+		try {
 			MasterBluetoothCommunicator.sendInstructions(instructions);
 		} catch (IOException e) {
 			Sound.buzz();
 		}
-		*/
 
 		// Localize robot and go to the center of the corner tile
-		localizer.doLocalization();
-		nav.turnTo(90);
-
-		/*try {
-			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
-			nav.travelTo(p.x, p.y);
-			nav.turnTo(p.theta);
-//			nav.travelTo(90, 120);
-//			nav.turnTo(90);
-			MasterBluetoothCommunicator.sendLaunchRequest();
-			Thread.sleep(3000);
-			nav.travelTo(30, 30);
-		} catch (NumberFormatException e1) {
-			Sound.buzz();
-		} catch (IOException e1) {
-			Sound.buzz();
-		} catch (InterruptedException e) {
-			Sound.buzz();
-		}
-		*/
-
-		// nav.travelTo(66, 13);
-		 nav.travelTo(50, 150);
-		 nav.travelTo(30, 30);
-		 nav.turnTo(90);
+//		localizer.doLocalization();
+//		nav.turnTo(90);
+//
+//		try {
+//			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+//			nav.travelTo(p.x, p.y);
+//			nav.turnTo(p.theta);
+//			MasterBluetoothCommunicator.sendLaunchRequest();
+//			Thread.sleep(3000);
+//			nav.travelTo(30, 30);
+//		} catch (NumberFormatException e1) {
+//			Sound.buzz();
+//		} catch (IOException e1) {
+//			Sound.buzz();
+//		} catch (InterruptedException e) {
+//			Sound.buzz();
+//		}
+//
+//		// nav.travelTo(66, 13);
+//		 nav.travelTo(50, 150);
+//		 nav.travelTo(30, 30);
+//		 nav.turnTo(90);
 	
 
 		if (true) {

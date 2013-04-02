@@ -28,9 +28,19 @@ public class ParseInstructions {
 				Thread.sleep(10); // spin waiting for data
 			
 			trans = new Instructions();
-			trans.goalX = dis.readInt();
+			trans.role = PlayerRole.lookupRole(dis.readInt());
 			ignore(dis);
-			trans.goalY = dis.readInt();
+			trans.startingCorner = StartCorner.lookupCorner(dis.readInt());
+			ignore(dis);
+			trans.bx = dis.readInt();
+			ignore(dis);
+			trans.by = dis.readInt();
+			ignore(dis);
+			trans.w1 = dis.readInt();
+			ignore(dis);
+			trans.w2 = dis.readInt();
+			ignore(dis);
+			trans.d1 = dis.readInt();
 			
 			return trans;
 		} catch (IOException e) {

@@ -230,5 +230,86 @@ public class BlockNavigator extends Navigator {
 	private void setDetector(LineDetector detector) {
 		this.detector = detector;
 	}
+	
+	public void goToLoader(double loaderX, double loaderY)
+	{
+		double offset = 0; 	//how many cm the punch is from the center of the robot
+		double dist = 0;	//how far the center of the robot is from the fron of the robot in cm
+		double x = 0;
+		double y = 0;
+		
+		double maxX = 0;
+		double maxY = 0;
+		
+		int yAxis = 1;
+		int xAxis = 0;
+		int farX = 2;
+		int farY = 3;
+		boolean[] wallBool = new boolean[4];
+		
+		//first determine which wall the loader is on
+		if(loaderX == 0)
+		{wallBool[yAxis] = true;}
+		if(loaderY == 0)
+		{wallBool[xAxis] = true;}
+		if(loaderX == maxX)
+		{wallBool[farY] = true;}
+		if(loaderY == maxY)
+		{wallBool[farX] = true;}
+		
+		if(wallBool[xAxis])
+		{
+			x = loaderX - offset;
+			y = 45;
+			travelTo(x,y);
+			turnTo(270);
+			travelTo(x, loaderY-dist);
+		}
+		if(wallBool[yAxis])
+		{
+			x = 45;
+			y = loaderY + offset;
+			travelTo(x,y);
+			turnTo(180);
+			travelTo(loaderX - dist, y);
+		}
+		if(wallBool[farX])
+		{
+			x = loaderX +offset;
+			y = maxY - 45;
+			travelTo(x,y);
+			turnTo(90);
+			travelTo(x, loaderY -dist);
+		}
+		if(wallBool[farY])
+		{
+			x = maxX - 45;
+			y = loaderY - offset;
+			travelTo(x,y);
+			turnTo(0);
+			travelTo(loaderX - dist, y);
+		}
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+		NXTRegulatedMotor motorA = robot.getLeftMotor();
+		NXTRegulatedMotor motorB = robot.getRightMotor();
+		
+		motorA.backward();
+		motorB.backward();
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+		
+		motorA.stop(true);
+		motorB.stop(false);
+		return;
+	}
 
 }

@@ -87,7 +87,8 @@ public class BlockNavigator extends Navigator {
 	@Override
 	public void travelTo(double x, double y) {
 		UltrasonicSensor realUS = new UltrasonicSensor(usPort);
-		USPollerThread US = new USPollerThread(realUS, US_RANGE);
+		UltrasonicPoller ultrasonicPoller = new UltrasonicPoller(realUS, US_RANGE);
+		Thread ultrasonicPollerThread = new Thread(ultrasonicPoller);
 
 		this.isNavigating = true;
 		int dir;
@@ -104,11 +105,13 @@ public class BlockNavigator extends Navigator {
 			yHead = 270;
 		}
 		turnTo(yHead);
+		
+		ultrasonicPollerThread.start();
 
 		int counter = 0;
-
+		
 		// Travel vertically loop (while not at destination row)
-		while (!isAt(destRow, odo.getY()) && US.obstacle == false) {
+		while (!isAt(destRow, odo.getY()) && ultrasonicPoller.obstacle) {
 			LCD.drawString("Counter " + counter, 0, 4);
 			counter++;
 			// Initialize to left
@@ -134,11 +137,12 @@ public class BlockNavigator extends Navigator {
 				// return;
 			}
 			// move forward one tile
+			
 			advanceATile();
 
 			// are we at the row?
 		}// end Travel vertically loop
-		if (US.obstacle == false) {
+		if (ultrasonicPoller.obstacle == false) {
 			destCol = calculateDestination(x);
 			// check if we need to go left or right
 			if (odo.getX() < destCol) {
@@ -150,7 +154,7 @@ public class BlockNavigator extends Navigator {
 		}
 
 		// Travel horizontally loop (while not at destination column)
-		while (!isAt(destCol, odo.getX()) && US.obstacle == false) {
+		while (!isAt(destCol, odo.getX()) && ultrasonicPoller.obstacle == false) {
 			// Initialize to left
 			dir = 90;
 
@@ -177,7 +181,7 @@ public class BlockNavigator extends Navigator {
 			advanceATile();
 
 		}// end Travel horizontally loop
-		if (US.obstacle == true) {
+		if (ultrasonicPoller.obstacle == true) {
 			dir = 90;
 			while (us.isObjectInRange(US_RANGE)) {
 				// Turn dir

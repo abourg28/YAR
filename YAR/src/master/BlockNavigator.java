@@ -19,6 +19,7 @@ import lejos.util.Delay;
  */
 public class BlockNavigator extends Navigator {
 
+	private static final double TOL = 1;
 	private final int US_RANGE = 35;
 	private LineDetector detector;
 	private static INavigator nav;
@@ -77,10 +78,13 @@ public class BlockNavigator extends Navigator {
 	public void travelToNearestIntersection() {
 		double closeIntersectionX = calculateDestination(odo.getX());
 		double closeIntersectionY = calculateDestination(odo.getY());
-		LCD.drawString("X: " + closeIntersectionX + ", Y: "
-				+ closeIntersectionY, 0, 7);
+		if ((Math.abs(odo.getX() - closeIntersectionX) < TOL)
+				&& (Math.abs(odo.getY() - closeIntersectionY) < TOL)) {
+			LCD.drawString("X: " + closeIntersectionX + ", Y: "
+					+ closeIntersectionY, 0, 7);
+			simpleTravelTo(closeIntersectionX, closeIntersectionY);
 
-		simpleTravelTo(closeIntersectionX, closeIntersectionY);
+		}
 
 	}
 
@@ -120,22 +124,27 @@ public class BlockNavigator extends Navigator {
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-				// // While there is an obstacle
-				// while (us.isObjectInRange(US_RANGE)) {
-				// // Turn dir
-				// turnTo(odo.getTheta() + dir);
-				// if (us.isObjectInRange(US_RANGE)) {
-				// dir = -dir;
-				// turnTo(odo.getTheta() + dir);
-				// } else {
-				// // Advance one tile
-				// advanceATile();
-				// turnTo(odo.getTheta() - dir);
-				// }
-				// }// end while there is an obstacle
-				// advanceATile();
-				// this.travelTo(x, y);
-				// return;
+				// While there is an obstacle
+				while (us.isObjectInRange(US_RANGE)) {
+
+					if (withinATile(odo.getY(), y)) {
+						break;
+					}
+
+					// Turn dir
+					turnTo(odo.getTheta() + dir);
+					if (us.isObjectInRange(US_RANGE)) {
+						dir = -dir;
+						turnTo(odo.getTheta() + dir);
+					} else {
+						// Advance one tile
+						advanceATile();
+						turnTo(odo.getTheta() - dir);
+					}
+				}// end while there is an obstacle
+				advanceATile();
+				this.travelTo(x, y);
+				return;
 			}
 			// move forward one tile
 
@@ -161,22 +170,27 @@ public class BlockNavigator extends Navigator {
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-				//
-				// // While there is an obstacle
-				// while (us.isObjectInRange(US_RANGE)) {
-				// // Turn dir
-				// turnTo(odo.getTheta() + dir);
-				// if (us.isObjectInRange(US_RANGE)) {
-				// dir = -dir;
-				// turnTo(odo.getTheta() + dir);
-				// } else {
-				// advanceATile();
-				// turnTo(odo.getTheta() - dir);
-				// }
-				// }// end while obstacle
-				// advanceATile();
-				// this.travelTo(x, y);
-				// return;
+
+				// While there is an obstacle
+				while (us.isObjectInRange(US_RANGE)) {
+
+					if (withinATile(odo.getX(), x)) {
+						break;
+					}
+
+					// Turn dir
+					turnTo(odo.getTheta() + dir);
+					if (us.isObjectInRange(US_RANGE)) {
+						dir = -dir;
+						turnTo(odo.getTheta() + dir);
+					} else {
+						advanceATile();
+						turnTo(odo.getTheta() - dir);
+					}
+				}// end while obstacle
+				advanceATile();
+				this.travelTo(x, y);
+				return;
 			}
 			// move forward one tile
 			advanceATile();
@@ -203,6 +217,10 @@ public class BlockNavigator extends Navigator {
 
 		this.isNavigating = false;
 	}// end travelTo
+
+	private boolean withinATile(double curr, double dest) {
+		return Math.abs(curr - dest) < 45;
+	}
 
 	private void advanceATile() {
 		this.getDetector().advanceToIntersection();
@@ -261,32 +279,32 @@ public class BlockNavigator extends Navigator {
 		if (loaderX == 0) {
 			xAAA = 45;
 			yAAA = loaderY + offset;
-			
+
 			xBBB = loaderX + dist;
 			yBBB = yAAA;
-			
+
 		}
 		if (loaderY == 0) {
 			xAAA = loaderX - offset;
 			yAAA = 45;
-			
+
 			xBBB = xAAA;
 			yBBB = loaderY + dist;
 		}
 		if (loaderX == maxX) {
 			xAAA = maxX - 45;
 			yAAA = loaderY - offset;
-			
+
 			xBBB = loaderX - dist;
 			yBBB = yAAA;
 		}
 		if (loaderY == maxY) {
 			xAAA = loaderX + offset;
 			yAAA = maxY - 45;
-			
+
 			xBBB = xAAA;
 			yBBB = loaderY - dist;
-		}	
+		}
 		travelTo(xAAA, yAAA);
 		simpleTravelTo(xBBB, yBBB);
 
@@ -297,11 +315,12 @@ public class BlockNavigator extends Navigator {
 			Thread.currentThread().interrupt();
 		}
 
-
 		rightMotor.setSpeed(FORWARD_SPEED);
 		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.rotate(-convertDistance(robot.LEFT_WHEEL_RADIUS, 45 - dist), true);
-		leftMotor.rotate(-convertDistance(robot.LEFT_WHEEL_RADIUS, 45 - dist), false);
+		rightMotor.rotate(-convertDistance(robot.LEFT_WHEEL_RADIUS, 45 - dist),
+				true);
+		leftMotor.rotate(-convertDistance(robot.LEFT_WHEEL_RADIUS, 45 - dist),
+				false);
 		return;
 	}
 

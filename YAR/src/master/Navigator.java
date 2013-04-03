@@ -106,22 +106,17 @@ public abstract class Navigator extends Thread implements INavigator {
 		double degreeWant = Math.atan(Math.abs(DesiredY - currentY)
 				/ Math.abs(DesiredX - currentX))
 				* 180 / Math.PI;
-		if (DesiredX - currentX > 0 && DesiredY - currentY > 0) {// in the first
-																	// octet
+		// In the first quadrant
+		if (DesiredX - currentX > 0 && DesiredY - currentY > 0) {
 			return degreeWant;
-
-		} else if (DesiredX - currentX < 0 && DesiredY - currentY > 0) {// in
-																		// the
-																		// second
-																		// octet
+			 // In the second octet
+		} else if (DesiredX - currentX < 0 && DesiredY - currentY > 0) {
 			return 180 - degreeWant;
 		} else if (DesiredX - currentX < 0 && DesiredY - currentY < 0) {
 			return 180 + degreeWant;
 		}
-
-		else if (DesiredX - currentX > 0 && DesiredY - currentY < 0) {// in the
-																		// 4th
-																		// octet
+		// In the 4th quadrant
+		else if (DesiredX - currentX > 0 && DesiredY - currentY < 0) {
 			return -degreeWant;
 		} else {
 			return 0;

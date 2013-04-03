@@ -16,7 +16,8 @@ import lejos.util.Delay;
  * 
  */
 public class LineDetector {
-	private final double TOL = 5; // our tolerance of our heading, in degrees
+	// our tolerance of our heading, in degrees
+	private final double TOL = 5;
 	private static Odometer odometer;
 	private final int SPEED = 70;
 	private final int fast_SPEED = 250;
@@ -33,34 +34,27 @@ public class LineDetector {
 		this.robot = robot;
 		leftMotor = robot.getLeftMotor();
 		rightMotor = robot.getRightMotor();
-		leftLine = new LineDetectorThread(leftLS, odometer,
-				leftMotor);
-		rightLine = new LineDetectorThread(rightLS, odometer,
-				rightMotor);
+		leftLine = new LineDetectorThread(leftLS, odometer, leftMotor);
+		rightLine = new LineDetectorThread(rightLS, odometer, rightMotor);
 		leftLine.start();
 		rightLine.start();
 	}
-	
+
 	public void advanceToIntersection() {
 		advanceToIntersection(true);
 	}
-	
+
 	public void advanceToIntersection(boolean delay) {
-		//move a distance of 26 cm quickly first
+		// move a distance of 27 cm quickly first
 		rightMotor.setSpeed(fast_SPEED);
 		leftMotor.setSpeed(fast_SPEED);
-		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,23),true);
-		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS,23),false);
-		//then slow down
+		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 27), true);
+		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 27), false);
+		// then slow down
 		rightMotor.setSpeed(SPEED);
 		leftMotor.setSpeed(SPEED);
 		rightMotor.forward();
 		leftMotor.forward();
-		
-		if (delay) {
-			// Advance a bit not to read the previous intersection
-			Delay.msDelay(1000);
-		}
 
 		while (true) {
 			if ((leftLine.onLine == true && rightLine.onLine == false)) {
@@ -73,8 +67,8 @@ public class LineDetector {
 				Sound.playTone(100, 100);
 				leftMotor.setSpeed(0);
 				rightMotor.setSpeed(0);
-				Delay.msDelay(1000);
-				updatePos(); // before exiting, update the position of the robot
+				// before exiting, update the position of the robot
+				updatePos();
 				return;
 			} else if ((leftLine.onLine == false && rightLine.onLine == true)) {
 				leftMotor.setSpeed(SPEED);
@@ -82,19 +76,16 @@ public class LineDetector {
 
 				while (leftLine.onLine == false) {
 				}
-
 				Sound.playTone(100, 100);
-				
+
 				rightMotor.setSpeed(0);
 				leftMotor.setSpeed(0);
-				
-				
-				Delay.msDelay(1000);
-				updatePos(); // before exiting, update the position of the robot
+				// before exiting, update the position of the robot
+				updatePos();
 				return;
-			}
-			 else if (rightLine.onLine == true && leftLine.onLine == true) {
-				updatePos(); // before exiting, update the position of the robot
+			} else if (rightLine.onLine == true && leftLine.onLine == true) {
+				// before exiting, update the position of the robot
+				updatePos();
 				return;
 			}
 			Delay.msDelay(100);
@@ -103,54 +94,32 @@ public class LineDetector {
 	}
 
 	public void updatePos() {
-		if (odometer.getTheta() <190 && odometer.getTheta()>170){
+		if (odometer.getTheta() < 190 && odometer.getTheta() > 170) {
 			odometer.setTheta(180);
-		}
-		else if (odometer.getTheta() <10  || odometer.getTheta()>350){
+		} else if (odometer.getTheta() < 10 || odometer.getTheta() > 350) {
 			odometer.setTheta(0);
-		}
-		else if (odometer.getTheta() <100 && odometer.getTheta()>80){
+		} else if (odometer.getTheta() < 100 && odometer.getTheta() > 80) {
 			odometer.setTheta(90);
-		}
-		else if (odometer.getTheta()<280 && odometer.getTheta()<280){
+		} else if (odometer.getTheta() < 280 && odometer.getTheta() < 280) {
 			odometer.setTheta(270);
 		}
 
-		double heading = odometer.getTheta(); // determine which direction we
-												// are heading in
+		// Determine which direction we are heading in
+		double heading = odometer.getTheta();
 
-		if (Math.abs(heading - 0) < TOL || (Math.abs(heading - 180) < TOL)) // if
-																			// heading
-																			// in
-																			// x
-																			// direction,
-																			// update
-																			// x
-		{
-			odometer.setX(Math.round(odometer.getX() / 30) * 30); // use round
-																	// function
-																	// to round
-																	// up or
-																	// down the
-																	// number of
-																	// squares
-																	// passed,
-																	// then
-																	// multiply
-																	// by 30 for
-																	// cm
-																	// traveled
+		// If heading in x direction, update x
+		if (Math.abs(heading - 0) < TOL || (Math.abs(heading - 180) < TOL)) {
+			// Use round function to round up or down the number of squares
+			// passed, then multiply by 30 for cm traveled
+			odometer.setX(Math.round(odometer.getX() / 30) * 30);
 		}
-		if (Math.abs(heading - 90) < TOL || (Math.abs(heading - 270) < TOL)) // same
-																				// for
-																				// y
-																				// direction
-		{
+		// Same for y direction
+		if (Math.abs(heading - 90) < TOL || (Math.abs(heading - 270) < TOL)) {
 			odometer.setY(Math.round(odometer.getY() / 30) * 30);
 		}
-		
 
 	}
+
 	protected static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, width * angle / 2);
 	}

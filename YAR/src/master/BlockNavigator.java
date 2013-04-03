@@ -235,7 +235,8 @@ public class BlockNavigator extends Navigator {
 		this.detector = detector;
 	}
 	
-	public void goToLoader(double loaderX, double loaderY)
+	@Override
+	public void goToLoader(int loaderX, int loaderY)
 	{
 		double offset = 0; 	//how many cm the punch is from the center of the robot
 		double dist = 0;	//how far the center of the robot is from the fron of the robot in cm
@@ -266,7 +267,6 @@ public class BlockNavigator extends Navigator {
 			x = loaderX - offset;
 			y = 45;
 			travelTo(x,y);
-			turnTo(270);
 			travelTo(x, loaderY-dist);
 		}
 		if(wallBool[yAxis])
@@ -274,7 +274,6 @@ public class BlockNavigator extends Navigator {
 			x = 45;
 			y = loaderY + offset;
 			travelTo(x,y);
-			turnTo(180);
 			travelTo(loaderX - dist, y);
 		}
 		if(wallBool[farX])
@@ -282,7 +281,6 @@ public class BlockNavigator extends Navigator {
 			x = loaderX +offset;
 			y = maxY - 45;
 			travelTo(x,y);
-			turnTo(90);
 			travelTo(x, loaderY -dist);
 		}
 		if(wallBool[farY])
@@ -290,7 +288,6 @@ public class BlockNavigator extends Navigator {
 			x = maxX - 45;
 			y = loaderY - offset;
 			travelTo(x,y);
-			turnTo(0);
 			travelTo(loaderX - dist, y);
 		}
 		

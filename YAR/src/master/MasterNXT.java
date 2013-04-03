@@ -70,7 +70,7 @@ public class MasterNXT {
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
 		nav.goToLoader(0, 150);
-		nav.travelTo(60, 150);
+		nav.travelTo(60, 180);
 		nav.turnTo(90);
 		
 

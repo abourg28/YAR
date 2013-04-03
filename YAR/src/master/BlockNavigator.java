@@ -19,7 +19,7 @@ import lejos.util.Delay;
  */
 public class BlockNavigator extends Navigator {
 
-	private static final double TOL = 1;
+	private static final double TOL = 0.05;
 	private final int US_RANGE = 35;
 	private LineDetector detector;
 	private static INavigator nav;
@@ -78,13 +78,9 @@ public class BlockNavigator extends Navigator {
 	public void travelToNearestIntersection() {
 		double closeIntersectionX = calculateDestination(odo.getX());
 		double closeIntersectionY = calculateDestination(odo.getY());
-		if ((Math.abs(odo.getX() - closeIntersectionX) < TOL)
-				&& (Math.abs(odo.getY() - closeIntersectionY) < TOL)) {
-			LCD.drawString("X: " + closeIntersectionX + ", Y: "
-					+ closeIntersectionY, 0, 7);
-			simpleTravelTo(closeIntersectionX, closeIntersectionY);
-
-		}
+		LCD.drawString("X: " + closeIntersectionX + ", Y: "
+				+ closeIntersectionY, 0, 7);
+		simpleTravelTo(closeIntersectionX, closeIntersectionY);
 
 	}
 

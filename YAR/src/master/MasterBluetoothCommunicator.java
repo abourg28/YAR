@@ -10,8 +10,12 @@ import java.io.PrintStream;
 
 import javax.bluetooth.RemoteDevice;
 
+import lejos.nxt.Sound;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import lejos.nxt.comm.NXTConnection;
+import lejos.nxt.comm.RS485;
+import lejos.nxt.comm.RS485Connection;
 import common.Instructions;
 import common.Pos;
 import common.Protocol;
@@ -24,18 +28,18 @@ import common.Protocol;
  */
 public class MasterBluetoothCommunicator {
 
-	private static BTConnection conn;
+	private static NXTConnection conn;
 	private static DataOutputStream out;
 	private static DataInputStream in;
 
 	public static void InitializeConnection() {
 		Bluetooth.setFriendlyName(Protocol.MASTER_NAME);
-
-		// Setup bluetooth connection
-		// NOTE: This will only work if these devices have previously been
-		// paired manually
-		RemoteDevice slave = Bluetooth.getKnownDevice(Protocol.SLAVE_NAME);
-		conn = Bluetooth.connect(slave);
+		
+		conn = RS485.connect(Protocol.SLAVE_NAME, NXTConnection.PACKET);
+		if (conn == null) {
+			Sound.buzz();
+			conn = RS485.connect(Protocol.SLAVE_NAME, NXTConnection.PACKET);
+		}
 		out = conn.openDataOutputStream();
 		in = conn.openDataInputStream();
 	}

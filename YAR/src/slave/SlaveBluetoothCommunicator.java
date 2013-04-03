@@ -12,6 +12,9 @@ import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import lejos.nxt.comm.NXTConnection;
+import lejos.nxt.comm.RS485;
+import lejos.nxt.comm.RS485Connection;
 import common.IDefender;
 import common.Instructions;
 import common.ParseInstructions;
@@ -29,7 +32,7 @@ public class SlaveBluetoothCommunicator {
 	private ILauncher launcher;
 	private IDefender defender;
 
-	private BTConnection conn;
+	private RS485Connection conn;
 	private DataOutputStream out;
 	private DataInputStream in;
 
@@ -46,9 +49,9 @@ public class SlaveBluetoothCommunicator {
 	public void handleRequests() {
 		LCD.clear(0);
 		LCD.drawString("Unconnected", 0, 0);
-		Bluetooth.setFriendlyName(Protocol.SLAVE_NAME);
+		RS485.setName(Protocol.SLAVE_NAME);
 		// Connect with master
-		conn = Bluetooth.waitForConnection();
+		conn = RS485.waitForConnection(0, NXTConnection.PACKET);
 		LCD.clear(0);
 		LCD.drawString("Connected", 0, 0);
 		out = conn.openDataOutputStream();

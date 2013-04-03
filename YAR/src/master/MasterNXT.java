@@ -10,6 +10,7 @@ import common.Instructions;
 import common.ParseInstructions;
 import common.PlayerRole;
 import common.Pos;
+import common.StartCorner;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
@@ -24,7 +25,7 @@ import master.USLocalizer.LocalizationType;
  */
 public class MasterNXT {
 
-	private static SensorPort usPort = SensorPort.S4;
+	private static SensorPort usPort = SensorPort.S3;
 	private static SensorPort leftLsPort = SensorPort.S1;
 	private static SensorPort rightLsPort = SensorPort.S2;
 
@@ -32,7 +33,6 @@ public class MasterNXT {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		IRobot robot = new YARRobot();
 		UltrasonicSensor us = new UltrasonicSensor(usPort);
 		USPoller poller = new USPoller(us);
@@ -53,11 +53,11 @@ public class MasterNXT {
 		Button.waitForAnyPress();
 		disp.start();
 
-		// Receive instructions from server
-		BluetoothConnection bt = new BluetoothConnection();
-		Instructions instructions = bt.getInstructions();
-		bt.printTransmission();
-//		Instructions instructions = new Instructions(2, 9);
+//		// Receive instructions from server
+//		BluetoothConnection bt = new BluetoothConnection();
+//		Instructions instructions = bt.getInstructions();
+//		bt.printTransmission();
+		Instructions instructions = getSampleInst();
 
 		// Send instructions to slave brick
 		MasterBluetoothCommunicator.InitializeConnection();
@@ -70,11 +70,18 @@ public class MasterNXT {
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
 		nav.goToLoader(0, 150);
+		nav.travelTo(60, 150);
+		nav.turnTo(90);
+		
 
 		try {
-			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
-			nav.travelTo(p.x, p.y);
-			nav.turnTo(p.theta);
+//			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+//			nav.travelTo(p.x, p.y);
+//			nav.turnTo(p.theta);
+			MasterBluetoothCommunicator.sendLaunchRequest();
+			Thread.sleep(3000);
+			MasterBluetoothCommunicator.sendLaunchRequest();
+			Thread.sleep(3000);
 			MasterBluetoothCommunicator.sendLaunchRequest();
 			Thread.sleep(3000);
 		} catch (NumberFormatException e1) {
@@ -108,6 +115,18 @@ public class MasterNXT {
 
 		}
 
+	}
+	
+	public static Instructions getSampleInst() {
+		Instructions i = new Instructions();
+		i.bx = 0;
+		i.by = 0;
+		i.d1 = 1;
+		i.role = PlayerRole.ATTACKER;
+		i.startingCorner = StartCorner.BOTTOM_LEFT;
+		i.w1 = 2;
+		i.w2 = 3;
+		return i;
 	}
 
 }

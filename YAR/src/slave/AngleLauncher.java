@@ -41,8 +41,8 @@ public class AngleLauncher implements ILauncher {
 		int launchspeed = (150 * range) - 350;
 		Motor.A.setSpeed(120);
 		Motor.B.setSpeed(120);
-		Motor.A.rotateTo(-30, false);
-		Motor.C.rotateTo(-30, true);
+		Motor.A.rotateTo(-30, true);
+		Motor.C.rotateTo(-30);
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException ex) {
@@ -52,13 +52,13 @@ public class AngleLauncher implements ILauncher {
 		Motor.A.setSpeed(launchspeed);
 		Motor.C.setSpeed(launchspeed);
 		Motor.A.rotateTo(110, true);
-		Motor.C.rotateTo(110, false);
+		Motor.C.rotateTo(110);
 		Sound.beepSequence();
 
 		Motor.A.setSpeed(120);
 		Motor.B.setSpeed(120);
 		Motor.A.rotateTo(0, true);
-		Motor.C.rotateTo(0, false);
+		Motor.C.rotateTo(0);
 		Motor.A.stop();
 		Motor.B.stop();
 	}
@@ -70,7 +70,7 @@ public class AngleLauncher implements ILauncher {
 		Motor.A.setSpeed(120);
 		Motor.B.setSpeed(120);
 		Motor.A.rotateTo(0, true);
-		Motor.C.rotateTo(0, false);
+		Motor.C.rotateTo(0);
 		Motor.A.stop();
 		Motor.B.stop();
 	}

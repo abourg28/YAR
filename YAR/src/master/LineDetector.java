@@ -48,8 +48,8 @@ public class LineDetector {
 		// move a distance of 27 cm quickly first
 		rightMotor.setSpeed(fast_SPEED);
 		leftMotor.setSpeed(fast_SPEED);
-		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 27), true);
-		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 27), false);
+		rightMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 25), true);
+		leftMotor.rotate(convertDistance(robot.LEFT_WHEEL_RADIUS, 25), false);
 		// then slow down
 		rightMotor.setSpeed(SPEED);
 		leftMotor.setSpeed(SPEED);

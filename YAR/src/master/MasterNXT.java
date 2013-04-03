@@ -69,7 +69,7 @@ public class MasterNXT {
 
 		// Localize robot and go to the center of the corner tile
 		localizer.doLocalization();
-		nav.turnTo(90);
+		nav.goToLoader(0, 150);
 
 		try {
 			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
@@ -77,7 +77,6 @@ public class MasterNXT {
 			nav.turnTo(p.theta);
 			MasterBluetoothCommunicator.sendLaunchRequest();
 			Thread.sleep(3000);
-			nav.travelTo(30, 30);
 		} catch (NumberFormatException e1) {
 			Sound.buzz();
 		} catch (IOException e1) {
@@ -85,6 +84,7 @@ public class MasterNXT {
 		} catch (InterruptedException e) {
 			Sound.buzz();
 		}
+		nav.travelTo(30, 30);
 	
 
 		if (true) {

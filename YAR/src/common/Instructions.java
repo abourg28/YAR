@@ -46,4 +46,31 @@ public class Instructions {
 	 * starting corner, 1 through 4
 	 */
 	public StartCorner startingCorner;
+	
+	public int getLoaderX() {
+		return (bx + 1) * 30;
+	}
+	
+	public int getLoaderY() {
+		return (by + 1) * 30;
+	}
+	
+	public int getDefenderZoneWidth() {
+		return (w1 + 1) * 30;
+	}
+	
+	public int getDefenderZoneDepth() {
+		return (w2 + 1) * 30;
+	}
+	
+	public int getOffensiveDepth() {
+		return (d1 + 1) * 30;
+	}
+	
+	public Pos getGoalPos() {
+		Pos p = new Pos();
+		p.x = (5 + 1) * 30;
+		p.y = (10 + 1) * 30;
+		return p;
+	}
 }

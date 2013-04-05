@@ -38,7 +38,18 @@ public class AngleLauncher implements ILauncher {
 	 * Rotates the catapult to launch projectile.
 	 */
 	public void launch() {
-		int launchspeed = (150 * range) - 350;
+		int launchspeed = 0;
+		switch(range)
+		{
+			case 5: launchspeed = 315;
+				break;
+			case 6: launchspeed = 375;
+				break;
+			case 7: launchspeed = 415;
+				break;
+			case 8: launchspeed = 600;
+				break;
+		}
 		Motor.A.setSpeed(120);
 		Motor.B.setSpeed(120);
 		Motor.A.rotateTo(-30, true);

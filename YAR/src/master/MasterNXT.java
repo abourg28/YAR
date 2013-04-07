@@ -53,56 +53,53 @@ public class MasterNXT {
 		Button.waitForAnyPress();
 		disp.start();
 
-//		// Receive instructions from server
-//		BluetoothConnection bt = new BluetoothConnection();
-//		Instructions instructions = bt.getInstructions();
-//		bt.printTransmission();
-		Instructions instructions = getSampleInst();
+		// Receive instructions from server
+		BluetoothConnection bt = new BluetoothConnection();
+		Instructions instructions = bt.getInstructions();
+		bt.printTransmission();
+//		Instructions instructions = getSampleInst();
 
-		// Send instructions to slave brick
-		MasterBluetoothCommunicator.InitializeConnection();
-		try {
-			MasterBluetoothCommunicator.sendInstructions(instructions);
-		} catch (IOException e) {
-			Sound.buzz();
-		}
-
-		// Localize robot and go to the center of the corner tile
-		localizer.doLocalization();
-		nav.goToLoader(0, 150);
-		nav.travelTo(60, 180);
-		nav.turnTo(90);
-		
-
-		try {
-//			Pos p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
-//			nav.travelTo(p.x, p.y);
-//			nav.turnTo(p.theta);
-			MasterBluetoothCommunicator.sendLaunchRequest();
-			Thread.sleep(3000);
-			MasterBluetoothCommunicator.sendLaunchRequest();
-			Thread.sleep(3000);
-			MasterBluetoothCommunicator.sendLaunchRequest();
-			Thread.sleep(3000);
-		} catch (NumberFormatException e1) {
-			Sound.buzz();
-		} catch (IOException e1) {
-			Sound.buzz();
-		} catch (InterruptedException e) {
-			Sound.buzz();
-		}
-		nav.travelTo(30, 30);
-	
-
-		if (true) {
+		if (instructions.role == PlayerRole.ATTACKER) {
 			// On offense
 			// Obtain launch position (send request to other brick)
+			Pos p = null;
+			MasterBluetoothCommunicator.InitializeConnection();
+			try {
+				// Send instructions to slave brick
+				MasterBluetoothCommunicator.sendInstructions(instructions);
+				p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+			} catch (IOException e) {
+				Sound.buzz();
+			}
 			// Offensive loop
 			while (true) {
-				// Navigate to the ball dispenser
-				// Load ball
-				// Navigate to the launch position
-				// Launch (send request to other brick)
+
+				// Localize robot and go to the center of the corner tile
+				localizer.doLocalization(instructions.startingCorner);
+				// Navigate to the ball dispenser and load balls
+				nav.goToLoader(instructions.getLoaderX(), instructions.getLoaderY());
+
+				try {
+					// Navigate to the launch position
+					nav.travelTo(p.x, p.y);
+					nav.turnTo(p.theta);
+					// Launch (send request to other brick)
+					MasterBluetoothCommunicator.sendLaunchRequest();
+					Thread.sleep(3000);
+					MasterBluetoothCommunicator.sendLaunchRequest();
+					Thread.sleep(3000);
+					MasterBluetoothCommunicator.sendLaunchRequest();
+					Thread.sleep(3000);
+				} catch (NumberFormatException e1) {
+					Sound.buzz();
+				} catch (IOException e1) {
+					Sound.buzz();
+				} catch (InterruptedException e) {
+					Sound.buzz();
+				}
+				
+				//TODO remove
+				break;
 			}
 		} else {
 			// Calculate defense position

@@ -5,6 +5,8 @@ package master;
 
 import java.io.IOException;
 
+import common.StartCorner;
+
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
@@ -24,6 +26,8 @@ public class USLocalizer {
 	public enum LocalizationType {
 		FALLING_EDGE, RISING_EDGE
 	};
+
+	private static final int MAX = 360;
 
 	public static int ROTATION_SPEED = 110;
 	public static int WALL_DIST = 40;
@@ -59,7 +63,7 @@ public class USLocalizer {
 	/**
 	 * Localize to the intersection two tiles away from the corner.
 	 */
-	public void doLocalization() {
+	public void doLocalization(StartCorner corner) {
 		double[] pos = new double[3];
 		double[] pos2 = new double[3];
 		double angleA, angleB;
@@ -89,7 +93,7 @@ public class USLocalizer {
 			while (getFilteredData() > 50) {
 			}
 			Sound.beep();
-			robot.getLeftMotor().stop();
+			robot.getLeftMotor().stop(true);
 			robot.getRightMotor().stop();
 			try {// rest for 300 ms
 				Thread.sleep(300);
@@ -154,83 +158,59 @@ public class USLocalizer {
 				odo.setY(0);
 				odo.setTheta(90);
 			}
-		} else {
-			int firstWall = 0; // asumes robot doesnt face the wall
-			robot.getLeftMotor().setSpeed(ROTATION_SPEED);// starts rotating
-			robot.getRightMotor().setSpeed(-ROTATION_SPEED);
-			robot.getLeftMotor().forward();
-			robot.getRightMotor().backward();
-			while (firstWall == 0) {
-				correctDistance = getFilteredData(); // re-update the distance
-				if (correctDistance - distanceWant < -2) {
-					// falls out of noise margin sees wall
-					firstWall = firstWall - 1; // exit
-				}
-			}
-			// keep rotating until the robot sees no wall, then latch the angle
-			while (getFilteredData() > 58) {
-			}
-			while (getFilteredData() < 60) {
-			}
-			double angleA1 = odo.getTheta();
-			robot.getLeftMotor().setSpeed(0);
-			robot.getRightMotor().setSpeed(0);
-			robot.getLeftMotor().setSpeed(ROTATION_SPEED);
-			robot.getRightMotor().setSpeed(ROTATION_SPEED);
-			robot.getLeftMotor().backward();
-			robot.getRightMotor().forward();
-			while (getFilteredData() > 58) {
-			}
-			while (getFilteredData() < 60) {
-			}
-
-			double angleB1 = odo.getTheta();
-			robot.getLeftMotor().setSpeed(0);
-			robot.getRightMotor().setSpeed(0);
-			if (angleA1 > angleB1) {
-
-				LCD.clear();
-				LCD.drawString("" + (((angleA1 + angleB1) / 2) + 135), 0, 6);
-
-				nav.turnTo(360 - Math.abs((360 - angleB1)
-						- Math.abs(45 - (angleA1 + (360 - angleB1)) / 2)) - 180+180);
-
-				Sound.playTone(1200, 150);
-				odo.setX(0);
-				odo.setY(0);
-				odo.setTheta(90);
-			} else {
-				LCD.clear();
-
-				nav.turnTo(360 - Math.abs((360 - angleB1)
-						- Math.abs(45 - (angleA1 + (360 - angleB1)) / 2))+180);
-				Sound.playTone(1200, 150);
-
-				odo.setX(0);
-				odo.setY(0);
-				odo.setTheta(90);
-
-			} 
 		}
-		
+
 		// Go to intersection
 		BlockNavigator blockNav = (BlockNavigator) nav;
 		LCD.drawString("Casted nav", 0, 4);
-//		blockNav.travelToNearestIntersection();
+		// blockNav.travelToNearestIntersection();
 		nav.turnTo(0);
 		blockNav.getDetector().advanceToIntersection();
 		odo.setX(60);
 		nav.turnTo(90);
 		blockNav.getDetector().advanceToIntersection();
 		odo.setY(60);
+
+		// Correct position according to corner
+		double x, y;
+		switch (corner) {
+		case BOTTOM_LEFT:
+			// No need to do anything. Facing 90
+			break;
+		case BOTTOM_RIGHT:
+			// Facing 180
+			odo.setTheta(odo.getTheta() + 90);
+			x = odo.getX();
+			y = odo.getY();
+			odo.setX(MAX - y);
+			odo.setY(x);
+			break;
+		case TOP_LEFT:
+			// Facing 0
+			odo.setTheta(odo.getTheta() - 90);
+			x = odo.getX();
+			y = odo.getY();
+			odo.setX(y);
+			odo.setY(MAX - x);
+			break;
+		case TOP_RIGHT:
+			// Facing 270
+			odo.setTheta(odo.getTheta() + 180);
+			x = odo.getX();
+			y = odo.getY();
+			odo.setX(MAX - x);
+			odo.setY(MAX - y);
+			break;
+		}
+
 		LCD.drawString("Travelled to intersection", 0, 4);
-		
+
 	}
 
 	private int getFilteredData() {
 		boolean filter = true;
 		filterControl = 0;
-		
+
 		while (filter) {
 			// do a ping
 			us.ping();

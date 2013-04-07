@@ -20,8 +20,8 @@ import lejos.nxt.comm.Bluetooth;
 public class SlaveNXT {
 	
 
-	private static NXTRegulatedMotor rightMotor = Motor.A;
-	private static NXTRegulatedMotor leftMotor = Motor.B;
+	private static NXTRegulatedMotor rightMotor = Motor.C;
+	private static NXTRegulatedMotor leftMotor = Motor.A;
 	private static SlaveBluetoothCommunicator comm;
 
 	/**

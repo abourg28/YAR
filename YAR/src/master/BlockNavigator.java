@@ -166,7 +166,6 @@ public class BlockNavigator extends Navigator {
 
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-
 				// While there is an obstacle
 				while (us.isObjectInRange(US_RANGE)) {
 

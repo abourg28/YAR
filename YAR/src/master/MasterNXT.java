@@ -5,19 +5,17 @@ package master;
 
 import java.io.IOException;
 
-import common.IDefender;
-import common.Instructions;
-import common.ParseInstructions;
-import common.PlayerRole;
-import common.Pos;
-import common.StartCorner;
-
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
 import master.USLocalizer.LocalizationType;
+
+import common.Instructions;
+import common.PlayerRole;
+import common.Position;
+import common.StartCorner;
 
 /**
  * @author alex
@@ -58,11 +56,14 @@ public class MasterNXT {
 		Instructions instructions = bt.getInstructions();
 		bt.printTransmission();
 //		Instructions instructions = getSampleInst();
+		
+
+		localizer.doLocalization(instructions.startingCorner);
 
 		if (instructions.role == PlayerRole.ATTACKER) {
 			// On offense
 			// Obtain launch position (send request to other brick)
-			Pos p = null;
+			Position p = null;
 			MasterBluetoothCommunicator.InitializeConnection();
 			try {
 				// Send instructions to slave brick
@@ -75,7 +76,6 @@ public class MasterNXT {
 			while (true) {
 
 				// Localize robot and go to the center of the corner tile
-				localizer.doLocalization(instructions.startingCorner);
 				// Navigate to the ball dispenser and load balls
 				nav.goToLoader(instructions.getLoaderX(), instructions.getLoaderY());
 
@@ -84,6 +84,10 @@ public class MasterNXT {
 					nav.travelTo(p.x, p.y);
 					nav.turnTo(p.theta);
 					// Launch (send request to other brick)
+					MasterBluetoothCommunicator.sendLaunchRequest();
+					Thread.sleep(3000);
+					MasterBluetoothCommunicator.sendLaunchRequest();
+					Thread.sleep(3000);
 					MasterBluetoothCommunicator.sendLaunchRequest();
 					Thread.sleep(3000);
 					MasterBluetoothCommunicator.sendLaunchRequest();

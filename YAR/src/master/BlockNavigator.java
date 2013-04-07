@@ -2,9 +2,10 @@
 //*/
 package master;
 
-import common.Pos;
-import lejos.nxt.*;
-import lejos.nxt.comm.RConsole;
+import lejos.nxt.LCD;
+import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 
 /**
@@ -69,8 +70,8 @@ public class BlockNavigator extends Navigator {
 
 		if (destCoord == 0) {
 			destCoord = 30;
-		} else if (destCoord == 1080) {
-			destCoord = 1080 - 30;
+		} else if (destCoord == 360) {
+			destCoord = 360 - 30;
 		}
 		return destCoord;
 	}
@@ -143,10 +144,7 @@ public class BlockNavigator extends Navigator {
 				return;
 			}
 			// move forward one tile
-
 			advanceATile();
-
-			// are we at the row?
 		}// end Travel vertically loop
 		if (ultrasonicPoller.obstacle == false) {
 			destCol = calculateDestination(x);
@@ -189,7 +187,6 @@ public class BlockNavigator extends Navigator {
 			}
 			// move forward one tile
 			advanceATile();
-
 		}// end Travel horizontally loop
 		if (ultrasonicPoller.obstacle == true) {
 			dir = 90;

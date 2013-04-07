@@ -3,13 +3,11 @@
  */
 package master;
 
-import java.io.IOException;
-
-import common.StartCorner;
-
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
+
+import common.StartCorner;
 
 /**
  * One of the first stages of the robot. This is the initial localization to

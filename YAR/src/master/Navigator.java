@@ -1,6 +1,5 @@
 package master;
 
-import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 
 /**
@@ -109,7 +108,7 @@ public abstract class Navigator extends Thread implements INavigator {
 		// In the first quadrant
 		if (DesiredX - currentX > 0 && DesiredY - currentY > 0) {
 			return degreeWant;
-			 // In the second octet
+			// In the second octet
 		} else if (DesiredX - currentX < 0 && DesiredY - currentY > 0) {
 			return 180 - degreeWant;
 		} else if (DesiredX - currentX < 0 && DesiredY - currentY < 0) {

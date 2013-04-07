@@ -6,14 +6,14 @@ package master;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 
 import javax.bluetooth.RemoteDevice;
 
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+
 import common.Instructions;
-import common.Pos;
+import common.Position;
 import common.Protocol;
 
 /**
@@ -60,11 +60,11 @@ public class MasterBluetoothCommunicator {
 		out.flush();
 	}
 
-	public static Pos sendLaunchPositionRequest() throws NumberFormatException,
+	public static Position sendLaunchPositionRequest() throws NumberFormatException,
 			IOException {
 		out.writeInt(Protocol.LAUNCH_POSITION_REQUEST);
 		out.flush();
-		Pos p = new Pos();
+		Position p = new Position();
 		p.x = in.readDouble();
 		p.y = in.readDouble();
 		p.theta = in.readDouble();

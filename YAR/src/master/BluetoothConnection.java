@@ -10,11 +10,12 @@ package master;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import lejos.nxt.LCD;
+import lejos.nxt.comm.Bluetooth;
+import lejos.nxt.comm.NXTConnection;
+
 import common.Instructions;
 import common.ParseInstructions;
-
-import lejos.nxt.LCD;
-import lejos.nxt.comm.*;
 /*
  * This class inits a bluetooth connection, waits for the data
  * and then allows access to the data after closing the BT channel.

@@ -6,16 +6,15 @@ package slave;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+
 import common.IDefender;
 import common.Instructions;
 import common.ParseInstructions;
-import common.Pos;
 import common.Protocol;
 
 /**

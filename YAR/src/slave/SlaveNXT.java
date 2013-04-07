@@ -3,15 +3,13 @@
  */
 package slave;
 
+import lejos.nxt.Motor;
+import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.comm.Bluetooth;
+
 import common.FanDefender;
 import common.IDefender;
 import common.Protocol;
-
-import lejos.nxt.Motor;
-import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.SensorPort;
-import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.comm.Bluetooth;
 
 /**
  * @author alex

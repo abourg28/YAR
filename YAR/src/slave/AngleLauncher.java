@@ -3,12 +3,11 @@
  */
 package slave;
 
-import common.Instructions;
-
-import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Sound;
 import lejos.util.Delay;
+
+import common.Instructions;
 
 /**
  * This class takes care of launching the projectile on an angle.

@@ -6,9 +6,6 @@ package master;
 
 import lejos.nxt.LightSensor;
 import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.Sound;
-import lejos.nxt.LCD;
-import lejos.nxt.Motor;
 import lejos.util.Delay;
 
 /**

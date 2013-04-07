@@ -1,6 +1,6 @@
 package common;
 
-public class Pos {
+public class Position {
 	public double x;
 	public double y;
 	public double theta;

@@ -8,8 +8,6 @@ package common;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-
-
 import lejos.nxt.LCD;
 
 /**

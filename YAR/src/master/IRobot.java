@@ -1,9 +1,6 @@
 package master;
 
 import lejos.nxt.NXTRegulatedMotor;
-/**
- * 
- */
 
 /**
  * 

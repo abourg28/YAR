@@ -8,8 +8,12 @@ package common;
 /**
  * Skeleton class to hold datatypes needed for final project
  * 
- * Simply all public variables so can be accessed with Instructions t = new
- * Instructions(); int fx = t.fx;
+ * Simply all public variables so can be accessed with
+ * 
+ * <pre>
+ * Instructions t = new Instructions();
+ * int fx = t.fx;
+ * </pre>
  * 
  * and so on...
  * 
@@ -46,29 +50,29 @@ public class Instructions {
 	 * starting corner, 1 through 4
 	 */
 	public StartCorner startingCorner;
-	
+
 	public int getLoaderX() {
 		return (bx + 1) * 30;
 	}
-	
+
 	public int getLoaderY() {
 		return (by + 1) * 30;
 	}
-	
+
 	public int getDefenderZoneWidth() {
 		return (w1 + 1) * 30;
 	}
-	
+
 	public int getDefenderZoneDepth() {
 		return (w2 + 1) * 30;
 	}
-	
+
 	public int getOffensiveDepth() {
 		return (d1 + 1) * 30;
 	}
-	
-	public Pos getGoalPos() {
-		Pos p = new Pos();
+
+	public Position getGoalPos() {
+		Position p = new Position();
 		p.x = (5 + 1) * 30;
 		p.y = (10 + 1) * 30;
 		return p;

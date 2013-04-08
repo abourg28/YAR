@@ -44,10 +44,9 @@ public class USPoller {
 		return distance;
 	}
 	
-	public boolean isObjectInRange(double US_RANGE) {
+	public boolean isObjectInRange(double range) {
 		int dist = getFilteredData();
-		LCD.drawString("Object in " + dist, 0, 5);
-		return dist < US_RANGE;
+		return dist < range;
 	}
 	
 }

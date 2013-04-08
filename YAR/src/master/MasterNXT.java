@@ -55,8 +55,7 @@ public class MasterNXT {
 		BluetoothConnection bt = new BluetoothConnection();
 		Instructions instructions = bt.getInstructions();
 		bt.printTransmission();
-//		Instructions instructions = getSampleInst();
-		
+		// Instructions instructions = getSampleInst();
 
 		localizer.doLocalization(instructions.startingCorner);
 
@@ -68,32 +67,50 @@ public class MasterNXT {
 			try {
 				// Send instructions to slave brick
 				MasterBluetoothCommunicator.sendInstructions(instructions);
-				p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
 			} catch (IOException e) {
 				Sound.buzz();
 			}
+
+			//  Try getting the launch position a few times
+			for (int i = 0; p == null || Double.isInfinite(p.x) || Double.isInfinite(p.y); i++) {
+				if (i >= 3) {
+					// If slave isn't cooperating then default to 8 tiles away
+					p = new Position();
+					p.x = 180;
+					p.y = 330 - (8 * 30);
+					p.theta = 90;
+					break;
+				}
+				try {
+					p = MasterBluetoothCommunicator.sendLaunchPositionRequest();
+				} catch (NumberFormatException e) {
+					Sound.buzz();
+				} catch (IOException e) {
+					Sound.buzz();
+				}
+			}
+			Sound.twoBeeps();
 			// Offensive loop
 			while (true) {
 
 				// Localize robot and go to the center of the corner tile
 				// Navigate to the ball dispenser and load balls
-				nav.goToLoader(instructions.getLoaderX(), instructions.getLoaderY());
+				nav.goToLoader(instructions.getLoaderX(),
+						instructions.getLoaderY());
 
 				try {
 					// Navigate to the launch position
 					nav.travelTo(p.x, p.y);
+					LCD.clear(4);
+					LCD.drawString("Launch x: " + p.x, 0, 4);
+					LCD.clear(5);
+					LCD.drawString("Launch y: " + p.y, 0, 5);
 					nav.turnTo(p.theta);
 					// Launch (send request to other brick)
-					MasterBluetoothCommunicator.sendLaunchRequest();
-					Thread.sleep(3000);
-					MasterBluetoothCommunicator.sendLaunchRequest();
-					Thread.sleep(3000);
-					MasterBluetoothCommunicator.sendLaunchRequest();
-					Thread.sleep(3000);
-					MasterBluetoothCommunicator.sendLaunchRequest();
-					Thread.sleep(3000);
-					MasterBluetoothCommunicator.sendLaunchRequest();
-					Thread.sleep(3000);
+					for (int i = 0; i < 5; i++) {
+						MasterBluetoothCommunicator.sendLaunchRequest();
+						Thread.sleep(3000);
+					}
 				} catch (NumberFormatException e1) {
 					Sound.buzz();
 				} catch (IOException e1) {
@@ -101,8 +118,8 @@ public class MasterNXT {
 				} catch (InterruptedException e) {
 					Sound.buzz();
 				}
-				
-				//TODO remove
+
+				// TODO remove
 				break;
 			}
 		} else {
@@ -117,7 +134,7 @@ public class MasterNXT {
 		}
 
 	}
-	
+
 	public static Instructions getSampleInst() {
 		Instructions i = new Instructions();
 		i.bx = 0;

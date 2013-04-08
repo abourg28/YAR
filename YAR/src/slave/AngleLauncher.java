@@ -34,6 +34,10 @@ public class AngleLauncher implements ILauncher {
 		this.inst = new Instructions();
 		this.range = 6;
 		this.theta = 90;
+		leftMotor.setSpeed(120);
+		rightMotor.setSpeed(120);
+		leftMotor.rotateTo(90, true);
+		rightMotor.rotateTo(90);
 	}
 
 	/**
@@ -61,8 +65,8 @@ public class AngleLauncher implements ILauncher {
 		// fire the ball after
 		leftMotor.setSpeed(launchspeed);
 		rightMotor.setSpeed(launchspeed);
-		leftMotor.rotateTo(110, true);
-		rightMotor.rotateTo(110);
+		leftMotor.rotateTo(90, true);
+		rightMotor.rotateTo(90);
 		Sound.beepSequence();
 
 		leftMotor.setSpeed(120);
@@ -77,9 +81,13 @@ public class AngleLauncher implements ILauncher {
 	public void retract() {
 		leftMotor.setSpeed(120);
 		rightMotor.setSpeed(120);
+		leftMotor.rotateTo(40, true);
+		rightMotor.rotateTo(40);
+		leftMotor.setSpeed(20);
+		rightMotor.setSpeed(20);
 		leftMotor.rotateTo(0, true);
 		rightMotor.rotateTo(0);
-	}
+	} 
 
 	/**
 	 * Update the x, y, and theta according to parameters.

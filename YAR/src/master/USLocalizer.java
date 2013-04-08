@@ -127,8 +127,6 @@ public class USLocalizer {
 			double offset = -90;
 			if (angleA > angleB) {
 
-				LCD.clear();
-				LCD.drawString("" + (((angleA + angleB) / 2) + 135), 0, 6);
 				robot.getLeftMotor().setSpeed(0);
 				robot.getRightMotor().setSpeed(0);
 
@@ -143,7 +141,6 @@ public class USLocalizer {
 				odo.setY(0);
 				odo.setTheta(90);
 			} else {
-				LCD.clear();
 				robot.getLeftMotor().setSpeed(0);
 				robot.getRightMotor().setSpeed(0);
 				nav.turnTo(offset
@@ -160,7 +157,6 @@ public class USLocalizer {
 
 		// Go to intersection
 		BlockNavigator blockNav = (BlockNavigator) nav;
-		LCD.drawString("Casted nav", 0, 4);
 		// blockNav.travelToNearestIntersection();
 		nav.turnTo(0);
 		blockNav.getDetector().advanceToIntersection();
@@ -200,8 +196,6 @@ public class USLocalizer {
 			odo.setY(MAX - y);
 			break;
 		}
-
-		LCD.drawString("Travelled to intersection", 0, 4);
 
 	}
 

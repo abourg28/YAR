@@ -48,8 +48,6 @@ public abstract class Navigator extends Thread implements INavigator {
 		this.odo.getPosition(pos);
 		double error = minimizeAngle(angle - pos[2]);
 
-		// LCD.drawString("Angle:" + angle + "  ", 0, 4);
-		// LCD.drawString("Error:" + error + "   ", 0, 5);
 		this.odo.getPosition(pos);
 		error = minimizeAngle(angle - pos[2]);
 

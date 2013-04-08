@@ -3,7 +3,7 @@ package master;
 import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 
-public class UltrasonicPoller implements Runnable {
+public class USPollerThread implements Runnable {
 	private int distance;
 	public boolean obstacle;
 	private final int FILTER_OUT = 10;
@@ -12,7 +12,7 @@ public class UltrasonicPoller implements Runnable {
 
 	private UltrasonicSensor us;
 
-	public UltrasonicPoller(UltrasonicSensor us, int distanceAcceptable) {
+	public USPollerThread(UltrasonicSensor us, int distanceAcceptable) {
 		this.us = us;
 		tolerance = distanceAcceptable;
 		obstacle = false;

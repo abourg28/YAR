@@ -30,7 +30,6 @@ public class BlockNavigator extends Navigator {
 
 	double ROTATE_SPEED = 110;
 	public final int FORWARD_SPEED = 200;
-	private double destCol;
 	private static SensorPort usPort = SensorPort.S4;
 
 	private BlockNavigator(IRobot robot, Odometer odo, USPoller uspoller) {
@@ -87,128 +86,76 @@ public class BlockNavigator extends Navigator {
 
 	@Override
 	public void travelTo(double x, double y) {
-		UltrasonicSensor realUS = new UltrasonicSensor(usPort);
-		UltrasonicPoller ultrasonicPoller = new UltrasonicPoller(realUS,
-				US_RANGE);
-		Thread ultrasonicPollerThread = new Thread(ultrasonicPoller);
-
-		this.isNavigating = true;
-		int dir;
 		travelToNearestIntersection();
 		Delay.msDelay(2000);
 
-		double destRow = calculateDestination(y);
-		double xHead, yHead;
-
-		// check if we need to go up or down
-		if (odo.getY() < destRow) {
-			yHead = 90;
+		double destinationRow = calculateDestination(y);
+		if (odo.getY() < destinationRow) {
+			// Go Up
+			turnTo(90);
 		} else {
-			yHead = 270;
+			// Go Down
+			turnTo(270);
 		}
-		turnTo(yHead);
-
-		// ultrasonicPollerThread.start();
-
-		int counter = 0;
 
 		// Travel vertically loop (while not at destination row)
-		while (!isAt(destRow, odo.getY()) && ultrasonicPoller.obstacle == false) {
-			LCD.drawString("Counter " + counter, 0, 4);
-			counter++;
-			// Initialize to left
-			dir = -90;
-
+		while (!isAt(destinationRow, odo.getY())) {
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-				// While there is an obstacle
-				while (us.isObjectInRange(US_RANGE)) {
-
-					if (withinATile(odo.getY(), y)) {
-						break;
-					}
-
-					// Turn dir
-					turnTo(odo.getTheta() + dir);
-					if (us.isObjectInRange(US_RANGE)) {
-						dir = -dir;
-						turnTo(odo.getTheta() + dir);
-					} else {
-						// Advance one tile
-						advanceATile();
-						turnTo(odo.getTheta() - dir);
-					}
-				}// end while there is an obstacle
-				advanceATile();
-				this.travelTo(x, y);
+				avoidObstacle(x, y);
 				return;
 			}
 			// move forward one tile
 			advanceATile();
 		}// end Travel vertically loop
-		if (ultrasonicPoller.obstacle == false) {
-			destCol = calculateDestination(x);
-			// check if we need to go left or right
-			if (odo.getX() < destCol) {
-				xHead = 0;
-			} else {
-				xHead = 180;
-			}
-			turnTo(xHead);
+		
+		double destinationColumn = calculateDestination(x);
+		if (odo.getX() < destinationColumn) {
+			// Go Right
+			turnTo(0);
+		} else {
+			// Go Left
+			turnTo(180);
 		}
 
 		// Travel horizontally loop (while not at destination column)
-		while (!isAt(destCol, odo.getX()) && ultrasonicPoller.obstacle == false) {
-			// Initialize to left
-			dir = 90;
-
+		while (!isAt(destinationColumn, odo.getX())) {
 			// If there is an obstacle within the next tile
 			if (us.isObjectInRange(US_RANGE)) {
-				// While there is an obstacle
-				while (us.isObjectInRange(US_RANGE)) {
-
-					if (withinATile(odo.getX(), x)) {
-						break;
-					}
-
-					// Turn dir
-					turnTo(odo.getTheta() + dir);
-					if (us.isObjectInRange(US_RANGE)) {
-						dir = -dir;
-						turnTo(odo.getTheta() + dir);
-					} else {
-						advanceATile();
-						turnTo(odo.getTheta() - dir);
-					}
-				}// end while obstacle
-				advanceATile();
-				this.travelTo(x, y);
+				avoidObstacle(x, y);
 				return;
 			}
 			// move forward one tile
 			advanceATile();
 		}// end Travel horizontally loop
-		if (ultrasonicPoller.obstacle == true) {
-			dir = 90;
-			while (us.isObjectInRange(US_RANGE)) {
-				// Turn dir
-				turnTo(odo.getTheta() + dir);
-				if (us.isObjectInRange(US_RANGE)) {
-					dir = -dir;
-					turnTo(odo.getTheta() + dir);
-				} else {
-					advanceATile();
-					turnTo(odo.getTheta() - dir);
-				}
-			}// end while obstacle
-			advanceATile();
-			this.travelTo(x, y);
-		}
 
 		simpleTravelTo(x, y);
-
-		this.isNavigating = false;
 	}// end travelTo
+	
+	private void avoidObstacle(double x, double y) {
+		// Initialize to left
+		double dir = 90;
+		// While there is an obstacle
+		while (us.isObjectInRange(US_RANGE)) {
+
+			if (withinATile(odo.getY(), y)) {
+				break;
+			}
+
+			// Turn dir
+			turnTo(odo.getTheta() + dir);
+			if (us.isObjectInRange(US_RANGE)) {
+				dir = -dir;
+				turnTo(odo.getTheta() + dir);
+			} else {
+				// Advance one tile
+				advanceATile();
+				turnTo(odo.getTheta() - dir);
+			}
+		}// end while there is an obstacle
+		advanceATile();
+		this.travelTo(x, y);		
+	}
 
 	private boolean withinATile(double curr, double dest) {
 		return Math.abs(curr - dest) < 45;
@@ -260,10 +207,6 @@ public class BlockNavigator extends Navigator {
 		double maxX = 360;
 		double maxY = 360;
 
-		int yAxis = 1;
-		int xAxis = 0;
-		int farX = 2;
-		int farY = 3;
 		NXTRegulatedMotor leftMotor = robot.getLeftMotor();
 		NXTRegulatedMotor rightMotor = robot.getRightMotor();
 

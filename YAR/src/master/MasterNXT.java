@@ -123,9 +123,10 @@ public class MasterNXT {
 				break;
 			}
 		} else {
-			// Calculate defense position
 			// Navigate to defender position
+			nav.travelTo(360 - instructions.getDefenderZoneDepth(), 180);
 			// Orient robot
+			nav.turnTo(0);
 			// Defensive loop
 			while (true) {
 				// Defend

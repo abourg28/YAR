@@ -93,18 +93,10 @@ public class LineDetector {
 	}
 
 	public void updatePos() {
-		if (odometer.getTheta() < 190 && odometer.getTheta() > 170) {
-			odometer.setTheta(180);
-		} else if (odometer.getTheta() < 10 || odometer.getTheta() > 350) {
-			odometer.setTheta(0);
-		} else if (odometer.getTheta() < 100 && odometer.getTheta() > 80) {
-			odometer.setTheta(90);
-		} else if (odometer.getTheta() < 280 && odometer.getTheta() < 280) {
-			odometer.setTheta(270);
-		}
+		double heading = odometer.getTheta();
+		odometer.setTheta(Math.round(odometer.getTheta() / 90) * 90);
 
 		// Determine which direction we are heading in
-		double heading = odometer.getTheta();
 
 		// If heading in x direction, update x
 		if (Math.abs(heading - 0) < TOL || (Math.abs(heading - 180) < TOL)) {

@@ -138,7 +138,7 @@ public class BlockNavigator extends Navigator {
 		// While there is an obstacle
 		while (us.isObjectInRange(US_RANGE)) {
 
-			if (withinATile(odo.getY(), y)) {
+			if (withinATile(odo.getX(), x)) {
 				break;
 			}
 
@@ -196,7 +196,7 @@ public class BlockNavigator extends Navigator {
 	@Override
 	public void goToLoader(int loaderX, int loaderY) {
 		// how many cm the punch is from the center of the robot
-		double offset = 8;
+		double offset = 10;
 		// how far the center of the robot is from the fron of the robot in cm
 		double dist = 15;
 		double xAAA = 30;

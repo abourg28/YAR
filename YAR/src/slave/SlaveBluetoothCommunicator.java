@@ -11,6 +11,7 @@ import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import lejos.util.Delay;
 
 import common.IDefender;
 import common.Instructions;
@@ -88,10 +89,11 @@ public class SlaveBluetoothCommunicator {
 	private void handleLaunchRequest() {
 		LCD.clear(0);
 		LCD.drawString("Received launch request", 0, 0);
+		this.launcher.retract();
 		this.launcher.launch();
 		LCD.clear(0);
 		LCD.drawString("Launched", 0, 0);
-		this.launcher.retract();
+		
 	}
 
 	private void handleLaunchPositionRequest() throws IOException {

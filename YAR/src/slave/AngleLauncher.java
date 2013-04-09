@@ -59,23 +59,14 @@ public class AngleLauncher implements ILauncher {
 			launchspeed = 700;
 			break;
 		}
-		leftMotor.setSpeed(120);
-		rightMotor.setSpeed(120);
-		leftMotor.rotateTo(-30, true);
-		rightMotor.rotateTo(-30);
 
 		Delay.msDelay(500);
 		// fire the ball after
 		leftMotor.setSpeed(launchspeed);
 		rightMotor.setSpeed(launchspeed);
-		leftMotor.rotateTo(90, true);
-		rightMotor.rotateTo(90);
+		leftMotor.rotateTo(110, true);
+		rightMotor.rotateTo(110);
 		Sound.beepSequence();
-
-		leftMotor.setSpeed(120);
-		rightMotor.setSpeed(120);
-		leftMotor.rotateTo(0, true);
-		rightMotor.rotateTo(0);
 	}
 
 	/**

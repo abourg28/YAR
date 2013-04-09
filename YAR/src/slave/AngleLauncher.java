@@ -17,7 +17,7 @@ import common.Instructions;
  */
 public class AngleLauncher implements ILauncher {
 
-	private final int GOAL_X = 5;
+	private final int GOAL_X = 5;// 5;
 	private final int GOAL_Y = 10;
 	private double x;
 	private double y;
@@ -45,16 +45,19 @@ public class AngleLauncher implements ILauncher {
 	 */
 	public void launch() {
 		int launchspeed = 0;
-		switch(range)
-		{
-			case 5: launchspeed = 315;
-				break;
-			case 6: launchspeed = 375;
-				break;
-			case 7: launchspeed = 415;
-				break;
-			case 8: launchspeed = 600;
-				break;
+		switch (range) {
+		case 5:
+			launchspeed = 375;
+			break;
+		case 6:
+			launchspeed = 425;
+			break;
+		case 7:
+			launchspeed = 600;
+			break;
+		case 8:
+			launchspeed = 700;
+			break;
 		}
 		leftMotor.setSpeed(120);
 		rightMotor.setSpeed(120);
@@ -87,16 +90,18 @@ public class AngleLauncher implements ILauncher {
 		rightMotor.setSpeed(20);
 		leftMotor.rotateTo(0, true);
 		rightMotor.rotateTo(0);
-	} 
+	}
 
 	/**
 	 * Update the x, y, and theta according to parameters.
 	 */
 	public void calculateLaunchPosition() {
 		range = inst.d1; // launches from WHERE ITS SUPPOSED TO!!
-		x = (GOAL_X + 1) * 30;
+		int angleOffset = 4;
+		x = ((GOAL_X  + 1 + angleOffset) * 30) - 10; // (GOAL_X + 1) * 30;
 		y = (GOAL_Y + 1 - range) * 30;
-		theta = 90;
+		theta = Math.toDegrees(Math.asin((range * 30)
+				/ (Math.sqrt((range * range * 900) + 12100)))) + 84;// 90;
 	}
 
 	public double getLaunchX() {

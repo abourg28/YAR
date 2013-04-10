@@ -47,16 +47,16 @@ public class AngleLauncher implements ILauncher {
 		int launchspeed = 0;
 		switch (range) {
 		case 5:
-			launchspeed = 375;
+			launchspeed = 320;
 			break;
 		case 6:
-			launchspeed = 425;
+			launchspeed = 410;
 			break;
 		case 7:
-			launchspeed = 600;
+			launchspeed = 520;
 			break;
 		case 8:
-			launchspeed = 700;
+			launchspeed = 540;
 			break;
 		}
 
@@ -89,10 +89,57 @@ public class AngleLauncher implements ILauncher {
 	public void calculateLaunchPosition() {
 		range = inst.d1; // launches from WHERE ITS SUPPOSED TO!!
 		int angleOffset = 4;
-		x = ((GOAL_X  + 1 + angleOffset) * 30) - 10; // (GOAL_X + 1) * 30;
+		x = ((GOAL_X + 1 + angleOffset) * 30) - 10; // (GOAL_X + 1) * 30;
 		y = (GOAL_Y + 1 - range) * 30;
-		theta = Math.toDegrees(Math.asin((range * 30)
-				/ (Math.sqrt((range * range * 900) + 12100)))) + 84;// 90;
+		theta = launchAngle(x - 5, y);
+//		switch (range) {
+//		case 5:
+//			theta = Math.toDegrees(Math.asin((range * 30)
+//					/ (Math.sqrt((range * range * 900) + 12100)))) + 72;// 90;
+//			break;
+//		case 6:
+//			theta = Math.toDegrees(Math.asin((range * 30)
+//					/ (Math.sqrt((range * range * 900) + 12100)))) + 60;// 90;
+//			break;
+//		case 7:
+//			theta = Math.toDegrees(Math.asin((range * 30)
+//					/ (Math.sqrt((range * range * 900) + 12100)))) + 56;// 90;
+//			break;
+//		case 8:
+//			theta = Math.toDegrees(Math.asin((range * 30)
+//					/ (Math.sqrt((range * range * 900) + 12100)))) + 50;// 90;
+//			break;
+//		}
+	}
+	
+	private double launchAngle(double launchX, double launchY) {
+		double goalX = (GOAL_X + 1) * 30;
+		double goalY = (GOAL_Y + 1) * 30;
+
+		double degreeWant = Math.atan(Math.abs(goalY - launchY)
+				/ Math.abs(goalX - launchX))
+				* 180 / Math.PI;
+		if (goalX - launchX > 0 && goalY - launchY > 0) {// in the first
+																	// octet
+			return degreeWant;
+
+		} else if (goalX - launchX < 0 && goalY - launchY > 0) {// in
+																		// the
+																		// second
+																		// octet
+			return 180 - degreeWant;
+		} else if (goalX - launchX < 0 && goalY - launchY < 0) {
+			return 180 + degreeWant;
+		}
+
+		else if (goalX - launchX > 0 && goalY - launchY < 0) {// in the
+																		// 4th
+																		// octet
+			return -degreeWant;
+		} else {
+			return 0;
+		}
+
 	}
 
 	public double getLaunchX() {

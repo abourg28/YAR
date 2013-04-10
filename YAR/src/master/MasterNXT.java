@@ -55,7 +55,7 @@ public class MasterNXT {
 		BluetoothConnection bt = new BluetoothConnection();
 		Instructions instructions = bt.getInstructions();
 		bt.printTransmission();
-		// Instructions instructions = getSampleInst();
+//		Instructions instructions = getSampleInst();
 
 		localizer.doLocalization(instructions.startingCorner);
 
@@ -109,7 +109,7 @@ public class MasterNXT {
 					// Launch (send request to other brick)
 					for (int i = 0; i < 5; i++) {
 						MasterBluetoothCommunicator.sendLaunchRequest();
-						Thread.sleep(3000);
+						Thread.sleep(5000);
 					}
 				} catch (NumberFormatException e1) {
 					Sound.buzz();
@@ -138,9 +138,9 @@ public class MasterNXT {
 
 	public static Instructions getSampleInst() {
 		Instructions i = new Instructions();
-		i.bx = 0;
-		i.by = 0;
-		i.d1 = 1;
+		i.bx = 11;
+		i.by = 6;
+		i.d1 = 8;
 		i.role = PlayerRole.ATTACKER;
 		i.startingCorner = StartCorner.BOTTOM_LEFT;
 		i.w1 = 2;

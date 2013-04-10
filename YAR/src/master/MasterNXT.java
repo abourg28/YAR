@@ -118,9 +118,6 @@ public class MasterNXT {
 				} catch (InterruptedException e) {
 					Sound.buzz();
 				}
-
-				// TODO remove
-				break;
 			}
 		} else {
 			// Navigate to defender position

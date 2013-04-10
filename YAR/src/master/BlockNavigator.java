@@ -196,7 +196,7 @@ public class BlockNavigator extends Navigator {
 	@Override
 	public void goToLoader(int loaderX, int loaderY) {
 		// how many cm the punch is from the center of the robot
-		double offset = 10;
+		double offset = 8;
 		// how far the center of the robot is from the fron of the robot in cm
 		double dist = 15;
 		double xAAA = 30;

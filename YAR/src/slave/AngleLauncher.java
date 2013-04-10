@@ -91,7 +91,7 @@ public class AngleLauncher implements ILauncher {
 		int angleOffset = 4;
 		x = ((GOAL_X + 1 + angleOffset) * 30) - 10; // (GOAL_X + 1) * 30;
 		y = (GOAL_Y + 1 - range) * 30;
-		theta = launchAngle(x - 5, y);
+		theta = launchAngle(x - 10, y);
 //		switch (range) {
 //		case 5:
 //			theta = Math.toDegrees(Math.asin((range * 30)

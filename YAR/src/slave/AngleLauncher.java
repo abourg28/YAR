@@ -47,16 +47,16 @@ public class AngleLauncher implements ILauncher {
 		int launchspeed = 0;
 		switch (range) {
 		case 5:
-			launchspeed = 320;
+			launchspeed = 300;
 			break;
 		case 6:
-			launchspeed = 410;
+			launchspeed = 390;
 			break;
 		case 7:
-			launchspeed = 520;
+			launchspeed = 500;
 			break;
 		case 8:
-			launchspeed = 540;
+			launchspeed = 520;
 			break;
 		}
 

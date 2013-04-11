@@ -198,7 +198,7 @@ public class BlockNavigator extends Navigator {
 		// how many cm the punch is from the center of the robot
 		double offset = 8;
 		// how far the center of the robot is from the fron of the robot in cm
-		double dist = 15;
+		double dist = 13;
 		double xAAA = 30;
 		double yAAA = 30;
 		double xBBB = 30;
@@ -245,7 +245,7 @@ public class BlockNavigator extends Navigator {
 
 		// Wait for balls to load
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(35000);
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
